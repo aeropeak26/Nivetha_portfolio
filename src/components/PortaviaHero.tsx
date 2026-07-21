@@ -93,7 +93,7 @@ export default function PortaviaHero() {
             transition={{ duration: 0.7 }}
             className="text-center lg:text-right"
           >
-            <h1 className="text-6xl sm:text-8xl md:text-[7.5rem] lg:text-[8.5rem] xl:text-[10.5rem] font-bold tracking-tighter text-[#0F1115] uppercase leading-none font-display">
+            <h1 className="text-6xl sm:text-8xl md:text-[6.5rem] lg:text-[7.5rem] xl:text-[9.5rem] font-bold tracking-tighter text-[#0F1115] uppercase leading-none font-display">
               DIGITAL
             </h1>
           </motion.div>
@@ -121,7 +121,7 @@ export default function PortaviaHero() {
             transition={{ duration: 0.7, delay: 0.1 }}
             className="text-center lg:text-left flex flex-col items-center lg:items-start"
           >
-            <h1 className="text-6xl sm:text-8xl md:text-[7.5rem] lg:text-[8.5rem] xl:text-[10.5rem] font-bold tracking-tighter text-[#0F1115] uppercase leading-none font-display">
+            <h1 className="text-6xl sm:text-8xl md:text-[6.5rem] lg:text-[7.5rem] xl:text-[9.5rem] font-bold tracking-tighter text-[#0F1115] uppercase leading-none font-display">
               DESIGNER
             </h1>
             <p className="mt-4 text-xs sm:text-sm md:text-base text-gray-500 font-medium max-w-xs leading-relaxed text-center lg:text-left">
