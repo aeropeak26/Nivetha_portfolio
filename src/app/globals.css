@@ -1,21 +1,21 @@
 @import "tailwindcss";
 
 :root {
-  --background: #F8F9FA;
+  --background: #FFFFFF;
   --foreground: #0F1115;
-  --accent-purple: #6366F1;
-  --accent-purple-light: #EEF2FF;
-  --card-bg: #FFFFFF;
+  --accent-primary: #6366F1;
+  --accent-primary-hover: #4F46E5;
+  --card-bg: #F8F9FA;
   --card-border: #E5E7EB;
   --muted-text: #6B7280;
 }
 
 .dark {
-  --background: #090A0F;
+  --background: #0B0C0E;
   --foreground: #F9FAFB;
-  --accent-purple: #818CF8;
-  --accent-purple-light: #1E1B4B;
-  --card-bg: #11131A;
+  --accent-primary: #A3E635;
+  --accent-primary-hover: #84CC16;
+  --card-bg: #13151A;
   --card-border: #1F2937;
   --muted-text: #9CA3AF;
 }
@@ -23,8 +23,8 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --color-accent-purple: var(--accent-purple);
-  --color-accent-purple-light: var(--accent-purple-light);
+  --color-accent-primary: var(--accent-primary);
+  --color-accent-primary-hover: var(--accent-primary-hover);
   --color-card-bg: var(--card-bg);
   --color-card-border: var(--card-border);
   --font-sans: var(--font-geist-sans);
@@ -45,8 +45,8 @@ body {
 
 /* Custom Selection & Scrollbar */
 ::selection {
-  background-color: var(--accent-purple);
-  color: #FFFFFF;
+  background-color: var(--accent-primary);
+  color: #0F1115;
 }
 
 ::-webkit-scrollbar {
@@ -63,7 +63,7 @@ body {
 }
 
 .dark ::-webkit-scrollbar-thumb {
-  background: #334155;
+  background: #272A30;
 }
 
 /* Condensed Display Font Utility */
@@ -72,18 +72,5 @@ body {
   letter-spacing: -0.02em;
 }
 
-/* Floating Animation */
-@keyframes float {
-  0%, 100% {
-    transform: translateY(0px) rotate(0deg);
-  }
-  50% {
-    transform: translateY(-8px) rotate(2deg);
-  }
-}
-
-.animate-float {
-  animation: float 4s ease-in-out infinite;
-}
 
 

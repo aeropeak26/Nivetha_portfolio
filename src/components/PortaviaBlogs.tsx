@@ -1,78 +1,104 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { ArrowUpRight, BookOpen } from "lucide-react";
+import Image from "next/image";
+import { ArrowUpRight } from "lucide-react";
 
 const articles = [
   {
-    title: "Designing for Micro-Interactions & Motion in Framer",
-    date: "Oct 24, 2025",
-    readTime: "4 min read",
-    tag: "Design Motion",
+    title: "5 DESIGN TRENDS THAT WILL DEFINE 2024",
+    category: "Insights",
+    date: "Apr 30, 2025",
+    description: "Explore the top design trends for 2024 that will influence web, UI/UX, and branding projects, helping you stay ahead of the curve.",
+    image: "/images/project_summer_vibes.png",
   },
   {
-    title: "Why Next.js App Router is the Ultimate Choice for Portfolio Sites",
-    date: "Nov 12, 2025",
-    readTime: "6 min read",
-    tag: "Engineering",
-  },
-  {
-    title: "Building Scalable Visual Identity Systems for Tech Brands",
-    date: "Dec 05, 2025",
-    readTime: "5 min read",
-    tag: "Brand Strategy",
+    title: "HOW TO STREAMLINE YOUR DESIGN WORKFLOW",
+    category: "Tutorials",
+    date: "Apr 27, 2025",
+    description: "Discover practical strategies to improve your design process, save time, and deliver quality work more efficiently.",
+    image: "/images/agency_workspace.png",
   },
 ];
 
 export default function PortaviaBlogs() {
   return (
-    <section id="blogs" className="py-20 px-4 bg-white dark:bg-[#0D0F14] transition-colors">
+    <section id="blogs" className="py-24 px-4 bg-[#F8F9FA] dark:bg-[#090A0F] transition-colors">
       <div className="max-w-5xl mx-auto">
         
         {/* Header */}
-        <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-12 gap-4">
-          <div>
-            <span className="text-xs font-bold uppercase tracking-widest text-[#6366F1] dark:text-indigo-400">
-              ✦ ARTICLES & THOUGHTS
-            </span>
-            <h2 className="text-3xl sm:text-4xl font-black text-black dark:text-white mt-2">
-              Recent Writings
-            </h2>
-          </div>
+        <div className="text-center max-w-2xl mx-auto mb-16">
+          <h2 className="text-4xl sm:text-6xl font-black text-black dark:text-white uppercase tracking-tighter font-display">
+            DESIGN INSIGHTS & IDEAS
+          </h2>
+          <p className="mt-4 text-xs sm:text-sm text-gray-600 dark:text-gray-400 font-medium leading-relaxed">
+            From design trends to creative processes, these articles offer insights to help you elevate your craft, solve challenges, and spark new ideas for your projects.
+          </p>
         </div>
 
-        {/* Article List */}
-        <div className="flex flex-col gap-4">
+        {/* 2-Column Grid (As seen in video 00:24) */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {articles.map((article, index) => (
-            <motion.a
+            <motion.div
               key={article.title}
-              href="#"
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.4, delay: index * 0.1 }}
-              className="group p-6 rounded-3xl bg-[#F8F9FA] dark:bg-[#13161F] border border-gray-200 dark:border-gray-800 hover:border-[#6366F1] dark:hover:border-indigo-500 transition-all duration-300 flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-sm"
+              transition={{ duration: 0.5, delay: index * 0.1 }}
+              className="group bg-white dark:bg-[#13151A] border border-gray-200 dark:border-gray-800 rounded-[32px] overflow-hidden shadow-md flex flex-col justify-between hover:shadow-xl transition-all"
             >
-              <div className="flex flex-col gap-1.5">
-                <div className="flex items-center gap-3 text-xs text-gray-500 dark:text-gray-400 font-medium">
-                  <span className="px-2.5 py-0.5 rounded-full bg-indigo-50 dark:bg-indigo-950/60 text-[#6366F1] dark:text-indigo-400 font-semibold text-[10px]">
-                    {article.tag}
-                  </span>
-                  <span>{article.date}</span>
-                  <span>•</span>
-                  <span>{article.readTime}</span>
+              <div>
+                {/* Thumbnail */}
+                <div className="relative aspect-[16/10] overflow-hidden bg-gray-100 dark:bg-gray-900">
+                  <Image
+                    src={article.image}
+                    alt={article.title}
+                    fill
+                    className="object-cover group-hover:scale-105 transition-transform duration-500"
+                  />
+                  <div className="absolute top-4 left-4 flex items-center gap-2">
+                    <span className="px-3 py-1 rounded-full bg-white/90 dark:bg-black/80 backdrop-blur-md text-[10px] font-extrabold uppercase text-black dark:text-white">
+                      {article.category}
+                    </span>
+                    <span className="px-3 py-1 rounded-full bg-black/60 backdrop-blur-md text-[10px] font-semibold text-white">
+                      {article.date}
+                    </span>
+                  </div>
+
+                  {/* Circular Arrow Button */}
+                  <div className="absolute bottom-4 right-4">
+                    <a
+                      href="#"
+                      className="w-10 h-10 rounded-full bg-[#6366F1] dark:bg-[#A3E635] text-white dark:text-black flex items-center justify-center shadow-md group-hover:scale-110 transition-transform"
+                      aria-label="Read Article"
+                    >
+                      <ArrowUpRight className="w-5 h-5" />
+                    </a>
+                  </div>
                 </div>
 
-                <h3 className="text-lg sm:text-xl font-bold text-black dark:text-white group-hover:text-[#6366F1] transition-colors">
-                  {article.title}
-                </h3>
+                {/* Content */}
+                <div className="p-6">
+                  <h3 className="text-xl font-extrabold uppercase font-display tracking-tight text-black dark:text-white group-hover:text-[#6366F1] dark:group-hover:text-[#A3E635] transition-colors">
+                    {article.title}
+                  </h3>
+                  <p className="mt-3 text-xs sm:text-sm text-gray-500 dark:text-gray-400 font-medium leading-relaxed">
+                    {article.description}
+                  </p>
+                </div>
               </div>
-
-              <div className="w-10 h-10 rounded-full bg-white dark:bg-[#1A1D27] border border-gray-200 dark:border-gray-700 flex items-center justify-center text-gray-700 dark:text-gray-200 group-hover:bg-[#6366F1] group-hover:text-white group-hover:border-[#6366F1] transition-all shrink-0">
-                <ArrowUpRight className="w-4 h-4" />
-              </div>
-            </motion.a>
+            </motion.div>
           ))}
+        </div>
+
+        {/* Bottom Button */}
+        <div className="mt-14 text-center">
+          <a
+            href="#blogs"
+            className="inline-flex items-center justify-center px-8 py-3.5 rounded-full border-2 border-black dark:border-white text-xs font-black tracking-widest uppercase text-black dark:text-white hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black transition-all shadow-md active:scale-95"
+          >
+            BROWSE ALL INSIGHTS
+          </a>
         </div>
 
       </div>
