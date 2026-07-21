@@ -10,7 +10,7 @@ import PortaviaContact from "@/components/PortaviaContact";
 
 export default function Home() {
   return (
-    <main className="min-h-screen bg-[#FFFFFF] dark:bg-[#0B0C0E] text-[#0F1115] dark:text-[#F9FAFB] transition-colors selection:bg-[#6366F1] dark:selection:bg-[#A3E635] selection:text-white dark:selection:text-black">
+    <main className="min-h-screen bg-white text-[#0F1115] selection:bg-[#6366F1] selection:text-white">
       <PortaviaNavbar />
       <PortaviaHero />
       <PortaviaServices />

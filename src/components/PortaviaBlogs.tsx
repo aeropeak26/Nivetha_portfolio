@@ -23,20 +23,20 @@ const articles = [
 
 export default function PortaviaBlogs() {
   return (
-    <section id="blogs" className="py-24 px-4 bg-[#F8F9FA] dark:bg-[#090A0F] transition-colors">
+    <section id="blogs" className="py-24 px-4 bg-white text-[#0F1115]">
       <div className="max-w-5xl mx-auto">
         
         {/* Header */}
         <div className="text-center max-w-2xl mx-auto mb-16">
-          <h2 className="text-4xl sm:text-6xl font-black text-black dark:text-white uppercase tracking-tighter font-display">
+          <h2 className="text-4xl sm:text-6xl font-bold text-[#0F1115] uppercase tracking-tighter font-display">
             DESIGN INSIGHTS & IDEAS
           </h2>
-          <p className="mt-4 text-xs sm:text-sm text-gray-600 dark:text-gray-400 font-medium leading-relaxed">
+          <p className="mt-4 text-xs sm:text-sm text-gray-600 font-medium leading-relaxed">
             From design trends to creative processes, these articles offer insights to help you elevate your craft, solve challenges, and spark new ideas for your projects.
           </p>
         </div>
 
-        {/* 2-Column Grid (As seen in video 00:24) */}
+        {/* 2-Column Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {articles.map((article, index) => (
             <motion.div
@@ -45,11 +45,11 @@ export default function PortaviaBlogs() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
-              className="group bg-white dark:bg-[#13151A] border border-gray-200 dark:border-gray-800 rounded-[32px] overflow-hidden shadow-md flex flex-col justify-between hover:shadow-xl transition-all"
+              className="group bg-[#F8F9FA] border border-gray-200 rounded-[32px] overflow-hidden shadow-sm flex flex-col justify-between hover:shadow-xl transition-all"
             >
               <div>
                 {/* Thumbnail */}
-                <div className="relative aspect-[16/10] overflow-hidden bg-gray-100 dark:bg-gray-900">
+                <div className="relative aspect-[16/10] overflow-hidden bg-gray-100">
                   <Image
                     src={article.image}
                     alt={article.title}
@@ -57,7 +57,7 @@ export default function PortaviaBlogs() {
                     className="object-cover group-hover:scale-105 transition-transform duration-500"
                   />
                   <div className="absolute top-4 left-4 flex items-center gap-2">
-                    <span className="px-3 py-1 rounded-full bg-white/90 dark:bg-black/80 backdrop-blur-md text-[10px] font-extrabold uppercase text-black dark:text-white">
+                    <span className="px-3 py-1 rounded-full bg-white/95 backdrop-blur-md text-[10px] font-extrabold uppercase text-[#0F1115] shadow-sm">
                       {article.category}
                     </span>
                     <span className="px-3 py-1 rounded-full bg-black/60 backdrop-blur-md text-[10px] font-semibold text-white">
@@ -69,7 +69,7 @@ export default function PortaviaBlogs() {
                   <div className="absolute bottom-4 right-4">
                     <a
                       href="#"
-                      className="w-10 h-10 rounded-full bg-[#6366F1] dark:bg-[#A3E635] text-white dark:text-black flex items-center justify-center shadow-md group-hover:scale-110 transition-transform"
+                      className="w-10 h-10 rounded-full bg-[#6366F1] text-white flex items-center justify-center shadow-md group-hover:scale-110 transition-transform"
                       aria-label="Read Article"
                     >
                       <ArrowUpRight className="w-5 h-5" />
@@ -79,10 +79,10 @@ export default function PortaviaBlogs() {
 
                 {/* Content */}
                 <div className="p-6">
-                  <h3 className="text-xl font-extrabold uppercase font-display tracking-tight text-black dark:text-white group-hover:text-[#6366F1] dark:group-hover:text-[#A3E635] transition-colors">
+                  <h3 className="text-xl font-bold uppercase font-display tracking-tight text-[#0F1115] group-hover:text-[#6366F1] transition-colors">
                     {article.title}
                   </h3>
-                  <p className="mt-3 text-xs sm:text-sm text-gray-500 dark:text-gray-400 font-medium leading-relaxed">
+                  <p className="mt-3 text-xs sm:text-sm text-gray-600 font-medium leading-relaxed">
                     {article.description}
                   </p>
                 </div>
@@ -95,7 +95,7 @@ export default function PortaviaBlogs() {
         <div className="mt-14 text-center">
           <a
             href="#blogs"
-            className="inline-flex items-center justify-center px-8 py-3.5 rounded-full border-2 border-black dark:border-white text-xs font-black tracking-widest uppercase text-black dark:text-white hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black transition-all shadow-md active:scale-95"
+            className="inline-flex items-center justify-center px-8 py-3.5 rounded-full border-2 border-[#0F1115] text-xs font-bold tracking-widest uppercase text-[#0F1115] hover:bg-[#0F1115] hover:text-white transition-all shadow-md active:scale-95"
           >
             BROWSE ALL INSIGHTS
           </a>

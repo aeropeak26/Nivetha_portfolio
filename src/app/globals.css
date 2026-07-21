@@ -10,16 +10,6 @@
   --muted-text: #6B7280;
 }
 
-.dark {
-  --background: #0B0C0E;
-  --foreground: #F9FAFB;
-  --accent-primary: #A3E635;
-  --accent-primary-hover: #84CC16;
-  --card-bg: #13151A;
-  --card-border: #1F2937;
-  --muted-text: #9CA3AF;
-}
-
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -27,25 +17,26 @@
   --color-accent-primary-hover: var(--accent-primary-hover);
   --color-card-bg: var(--card-bg);
   --color-card-border: var(--card-border);
-  --font-sans: var(--font-plus-jakarta);
-  --font-display: var(--font-syne);
+  --font-sans: var(--font-dm-sans);
+  --font-display: var(--font-space-grotesk);
 }
 
 html {
   scroll-behavior: smooth;
+  background-color: #FFFFFF;
+  color: #0F1115;
 }
 
 body {
-  background-color: var(--background);
-  color: var(--foreground);
-  font-family: var(--font-plus-jakarta), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background-color: #FFFFFF;
+  color: #0F1115;
+  font-family: var(--font-dm-sans), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   overflow-x: hidden;
-  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 /* Custom Selection & Scrollbar */
 ::selection {
-  background-color: var(--accent-primary);
+  background-color: #6366F1;
   color: #FFFFFF;
 }
 
@@ -54,7 +45,7 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--background);
+  background: #FFFFFF;
 }
 
 ::-webkit-scrollbar-thumb {
@@ -62,15 +53,16 @@ body {
   border-radius: 4px;
 }
 
-.dark ::-webkit-scrollbar-thumb {
-  background: #272A30;
+::-webkit-scrollbar-thumb:hover {
+  background: #6366F1;
 }
 
 /* Display Font Class */
 .font-display {
-  font-family: var(--font-syne), sans-serif;
+  font-family: var(--font-space-grotesk), sans-serif;
   letter-spacing: -0.03em;
 }
+
 
 
 
