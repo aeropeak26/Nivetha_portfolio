@@ -26,7 +26,7 @@ export default function PortaviaContact() {
         
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
           
-          {/* Left Portrait Column with Floating Hand Badge */}
+          {/* Left Portrait Column */}
           <motion.div
             initial={{ opacity: 0, x: -30 }}
             whileInView={{ opacity: 1, x: 0 }}
@@ -40,16 +40,6 @@ export default function PortaviaContact() {
                 fill
                 className="object-cover"
               />
-
-              {/* Interactive Floating Badge */}
-              <motion.div
-                animate={{ y: [0, -6, 0] }}
-                transition={{ repeat: Infinity, duration: 3 }}
-                className="absolute bottom-4 left-4 w-14 h-14 rounded-full bg-[#6366F1] text-white flex flex-col items-center justify-center font-bold shadow-lg border-2 border-white cursor-pointer text-xs"
-              >
-                <span>Hi</span>
-                <span className="text-[10px]">🖐️</span>
-              </motion.div>
             </div>
           </motion.div>
 

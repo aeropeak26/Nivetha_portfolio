@@ -2,11 +2,10 @@
 
 import Image from "next/image";
 import { motion } from "framer-motion";
-import { Sparkles, Layers, Paintbrush, Palette, Compass } from "lucide-react";
 
 export default function PortaviaHero() {
   return (
-    <section id="hero" className="min-h-screen pt-28 pb-16 px-4 flex flex-col justify-center items-center relative overflow-hidden bg-white text-[#0F1115]">
+    <section id="hero" className="min-h-screen pt-28 pb-16 px-4 sm:px-6 flex flex-col justify-center items-center relative overflow-hidden bg-white text-[#0F1115]">
       
       {/* Floating Design Tool Icons / Badges in Empty Spaces */}
       
@@ -14,9 +13,9 @@ export default function PortaviaHero() {
       <motion.div
         animate={{ y: [0, -12, 0], rotate: [-2, 2, -2] }}
         transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
-        className="absolute top-36 left-4 sm:left-12 lg:left-20 z-20 hidden sm:flex items-center gap-2 px-4 py-2 rounded-2xl bg-white/90 backdrop-blur-md border border-gray-200 shadow-xl text-xs font-bold text-gray-800"
+        className="absolute top-36 left-4 sm:left-10 lg:left-16 z-20 hidden sm:flex items-center gap-2 px-3.5 py-1.5 rounded-2xl bg-white/90 backdrop-blur-md border border-gray-200 shadow-xl text-xs font-bold text-gray-800"
       >
-        <div className="w-6 h-6 rounded-lg bg-indigo-500/10 text-indigo-600 flex items-center justify-center font-black">
+        <div className="w-5 h-5 rounded-lg bg-indigo-500/10 text-indigo-600 flex items-center justify-center font-black">
           ❖
         </div>
         <span>Figma Expert</span>
@@ -26,9 +25,9 @@ export default function PortaviaHero() {
       <motion.div
         animate={{ y: [0, 10, 0], rotate: [2, -2, 2] }}
         transition={{ duration: 6, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-        className="absolute bottom-36 left-6 sm:left-16 lg:left-24 z-20 hidden md:flex items-center gap-2 px-4 py-2 rounded-2xl bg-white/90 backdrop-blur-md border border-gray-200 shadow-xl text-xs font-bold text-gray-800"
+        className="absolute bottom-36 left-4 sm:left-10 lg:left-16 z-20 hidden md:flex items-center gap-2 px-3.5 py-1.5 rounded-2xl bg-white/90 backdrop-blur-md border border-gray-200 shadow-xl text-xs font-bold text-gray-800"
       >
-        <div className="w-6 h-6 rounded-lg bg-red-500/10 text-red-600 flex items-center justify-center font-black">
+        <div className="w-5 h-5 rounded-lg bg-red-500/10 text-red-600 flex items-center justify-center font-black">
           Ai
         </div>
         <span>Adobe Creative Suite</span>
@@ -38,9 +37,9 @@ export default function PortaviaHero() {
       <motion.div
         animate={{ y: [0, -10, 0], rotate: [2, -2, 2] }}
         transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
-        className="absolute top-36 right-4 sm:right-12 lg:right-20 z-20 hidden sm:flex items-center gap-2 px-4 py-2 rounded-2xl bg-white/90 backdrop-blur-md border border-gray-200 shadow-xl text-xs font-bold text-gray-800"
+        className="absolute top-36 right-4 sm:right-10 lg:right-16 z-20 hidden sm:flex items-center gap-2 px-3.5 py-1.5 rounded-2xl bg-white/90 backdrop-blur-md border border-gray-200 shadow-xl text-xs font-bold text-gray-800"
       >
-        <div className="w-6 h-6 rounded-lg bg-black text-white flex items-center justify-center font-black text-xs">
+        <div className="w-5 h-5 rounded-lg bg-black text-white flex items-center justify-center font-black text-xs">
           ⚡
         </div>
         <span>Framer Developer</span>
@@ -50,9 +49,9 @@ export default function PortaviaHero() {
       <motion.div
         animate={{ y: [0, 12, 0], rotate: [-2, 2, -2] }}
         transition={{ duration: 5.5, repeat: Infinity, ease: "easeInOut", delay: 1.5 }}
-        className="absolute bottom-44 right-6 sm:right-16 lg:right-24 z-20 hidden md:flex items-center gap-2 px-4 py-2 rounded-2xl bg-white/90 backdrop-blur-md border border-gray-200 shadow-xl text-xs font-bold text-gray-800"
+        className="absolute bottom-36 right-4 sm:right-10 lg:right-16 z-20 hidden md:flex items-center gap-2 px-3.5 py-1.5 rounded-2xl bg-white/90 backdrop-blur-md border border-gray-200 shadow-xl text-xs font-bold text-gray-800"
       >
-        <div className="w-6 h-6 rounded-full bg-pink-500/10 text-pink-600 flex items-center justify-center font-black text-xs">
+        <div className="w-5 h-5 rounded-full bg-pink-500/10 text-pink-600 flex items-center justify-center font-black text-xs">
           🏀
         </div>
         <span>Dribbble Pro</span>
@@ -72,39 +71,39 @@ export default function PortaviaHero() {
 
 
       {/* Hero Container */}
-      <div className="max-w-7xl mx-auto w-full flex flex-col items-center my-auto relative z-10 px-2 sm:px-4">
+      <div className="w-full max-w-6xl mx-auto flex flex-col items-center my-auto relative z-10">
         
         {/* Top Name Subtitle */}
         <motion.span
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
-          className="text-xs sm:text-sm font-bold uppercase tracking-[0.25em] text-gray-500 mb-6 font-sans"
+          className="text-xs sm:text-sm font-bold uppercase tracking-[0.25em] text-gray-500 mb-6 font-sans text-center"
         >
           DUNCAN ROBERT
         </motion.span>
 
-        {/* Main Display Title Grid: DIGITAL [Portrait] DESIGNER */}
-        <div className="w-full flex flex-col lg:flex-row items-center justify-center gap-4 lg:gap-6 overflow-hidden">
+        {/* Main Display Title Grid: DIGITAL [Portrait] DESIGNER (Fluid typography & spacing so all letters fit 100% visible on screen) */}
+        <div className="w-full flex flex-col lg:flex-row items-center justify-center gap-4 lg:gap-6 px-2">
           
-          {/* Left Headline: DIGITAL (Sized responsively to fit 100% inside container) */}
+          {/* Left Headline: DIGITAL */}
           <motion.div
-            initial={{ opacity: 0, x: -40 }}
+            initial={{ opacity: 0, x: -30 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.7 }}
-            className="text-center lg:text-right shrink-0"
+            className="text-center lg:text-right flex-1 min-w-0"
           >
-            <h1 className="text-5xl sm:text-7xl md:text-8xl lg:text-[7.5rem] xl:text-[8.5rem] font-bold tracking-tighter text-[#0F1115] uppercase leading-none font-display">
+            <h1 className="text-4xl sm:text-6xl md:text-7xl lg:text-7xl xl:text-8xl font-bold tracking-tighter text-[#0F1115] uppercase leading-none font-display whitespace-nowrap">
               DIGITAL
             </h1>
           </motion.div>
 
-          {/* Center Portrait Image Card */}
+          {/* Center Portrait Image Card (Clean without hand badge) */}
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.7, delay: 0.2 }}
-            className="relative w-56 sm:w-64 md:w-72 aspect-[3/4] rounded-[32px] overflow-hidden shadow-2xl border border-gray-200 shrink-0 my-2 lg:my-0 group bg-[#F8F9FA]"
+            className="relative w-52 sm:w-60 md:w-64 aspect-[3/4] rounded-[32px] overflow-hidden shadow-xl border border-gray-200 shrink-0 my-2 lg:my-0 group bg-[#F8F9FA]"
           >
             <Image
               src="/images/duncan_portrait.png"
@@ -113,28 +112,19 @@ export default function PortaviaHero() {
               priority
               className="object-cover group-hover:scale-105 transition-transform duration-700"
             />
-
-            {/* Periwinkle Blue Floating Hand Badge */}
-            <motion.div
-              animate={{ y: [0, -6, 0] }}
-              transition={{ repeat: Infinity, duration: 3, ease: "easeInOut" }}
-              className="absolute -bottom-2 -left-2 w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-[#6366F1] text-white flex items-center justify-center shadow-lg border-2 border-white text-lg sm:text-xl cursor-pointer hover:scale-110 transition-transform"
-            >
-              🖐️
-            </motion.div>
           </motion.div>
 
-          {/* Right Headline & Subtitle: DESIGNER (Sized responsively to fit 100% inside container) */}
+          {/* Right Headline & Subtitle: DESIGNER */}
           <motion.div
-            initial={{ opacity: 0, x: 40 }}
+            initial={{ opacity: 0, x: 30 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.7, delay: 0.1 }}
-            className="text-center lg:text-left flex flex-col items-center lg:items-start shrink-0"
+            className="text-center lg:text-left flex-1 min-w-0 flex flex-col items-center lg:items-start"
           >
-            <h1 className="text-5xl sm:text-7xl md:text-8xl lg:text-[7.5rem] xl:text-[8.5rem] font-bold tracking-tighter text-[#0F1115] uppercase leading-none font-display">
+            <h1 className="text-4xl sm:text-6xl md:text-7xl lg:text-7xl xl:text-8xl font-bold tracking-tighter text-[#0F1115] uppercase leading-none font-display whitespace-nowrap">
               DESIGNER
             </h1>
-            <p className="mt-3 text-xs sm:text-sm text-gray-500 font-medium max-w-xs leading-relaxed">
+            <p className="mt-3 text-xs sm:text-sm text-gray-500 font-medium max-w-xs leading-relaxed text-center lg:text-left">
               I'm a US-based digital designer and Framer developer
             </p>
           </motion.div>
