@@ -1,27 +1,19 @@
-import Navbar from "@/components/Navbar";
-import HeroSection from "@/components/HeroSection";
-import StatsBar from "@/components/StatsBar";
-import AboutSection from "@/components/AboutSection";
-import ServicesSection from "@/components/ServicesSection";
-import MarqueeBanner from "@/components/MarqueeBanner";
-import TeamSection from "@/components/TeamSection";
-import TestimonialsSection from "@/components/TestimonialsSection";
-import CtaContactSection from "@/components/CtaContactSection";
-import Footer from "@/components/Footer";
+import PortaviaNavbar from "@/components/PortaviaNavbar";
+import PortaviaHero from "@/components/PortaviaHero";
+import PortaviaAbout from "@/components/PortaviaAbout";
+import PortaviaProjects from "@/components/PortaviaProjects";
+import PortaviaBlogs from "@/components/PortaviaBlogs";
+import PortaviaContact from "@/components/PortaviaContact";
 
 export default function Home() {
   return (
-    <main className="min-h-screen bg-[#08090A] text-white selection:bg-[#E5FE00] selection:text-[#0B0C0E]">
-      <Navbar />
-      <HeroSection />
-      <StatsBar />
-      <AboutSection />
-      <ServicesSection />
-      <MarqueeBanner />
-      <TeamSection />
-      <TestimonialsSection />
-      <CtaContactSection />
-      <Footer />
+    <main className="min-h-screen bg-[#F8F9FA] dark:bg-[#090A0F] text-[#0F1115] dark:text-[#F9FAFB] transition-colors selection:bg-[#6366F1] selection:text-white">
+      <PortaviaNavbar />
+      <PortaviaHero />
+      <PortaviaAbout />
+      <PortaviaProjects />
+      <PortaviaBlogs />
+      <PortaviaContact />
     </main>
   );
 }
