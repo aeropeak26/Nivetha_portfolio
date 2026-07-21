@@ -1,0 +1,101 @@
+@import "tailwindcss";
+
+:root {
+  --background: #0B0C0E;
+  --foreground: #F4F5F7;
+  --brand-yellow: #E5FE00;
+  --brand-yellow-hover: #D4F82C;
+  --bg-dark-card: #131518;
+  --bg-light-hero: #F3F4F6;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-brand-yellow: var(--brand-yellow);
+  --color-brand-yellow-hover: var(--brand-yellow-hover);
+  --color-bg-dark-card: var(--bg-dark-card);
+  --color-bg-light-hero: var(--bg-light-hero);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: #08090A;
+  color: #F4F5F7;
+  font-family: var(--font-geist-sans), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  overflow-x: hidden;
+}
+
+/* Custom Selection & Scrollbar */
+::selection {
+  background-color: #E5FE00;
+  color: #0B0C0E;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0B0C0E;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #272A30;
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #E5FE00;
+}
+
+/* Custom Arch Radius */
+.rounded-hero-arch {
+  border-bottom-left-radius: 2.5rem;
+  border-bottom-right-radius: 2.5rem;
+}
+
+@media (min-width: 768px) {
+  .rounded-hero-arch {
+    border-bottom-left-radius: 4rem;
+    border-bottom-right-radius: 4rem;
+  }
+}
+
+.rounded-footer-arch {
+  border-top-left-radius: 2.5rem;
+  border-top-right-radius: 2.5rem;
+}
+
+@media (min-width: 768px) {
+  .rounded-footer-arch {
+    border-top-left-radius: 3.5rem;
+    border-top-right-radius: 3.5rem;
+  }
+}
+
+/* Marquee Keyframes */
+@keyframes marquee {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-marquee {
+  display: flex;
+  width: 200%;
+  animation: marquee 20s linear infinite;
+}
+
+.animate-marquee:hover {
+  animation-play-state: paused;
+}
+
