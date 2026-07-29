@@ -15,6 +15,7 @@ const spaceGrotesk = Space_Grotesk({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://nivetha-portfolio.vercel.app"),
   title: "Nivetha Velusamy — UI/UX Designer & Front-End Developer | Portfolio",
   description:
     "Portfolio of Nivetha Velusamy, UI/UX Designer & Visual Designer based in Coimbatore, India. Showcasing Figma UI/UX case studies, web design systems, interactive prototypes, and front-end development.",
