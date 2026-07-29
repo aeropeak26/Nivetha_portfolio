@@ -1058,9 +1058,11 @@ export default function AdminPage() {
 
       {/* FULL PROJECT CASE STUDY EDIT MODAL */}
       {isProjectModalOpen && editingProject && (
-        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
-          <div className="bg-white border border-gray-200 rounded-3xl max-w-4xl w-full max-h-[90vh] overflow-y-auto p-6 sm:p-8 my-8 shadow-2xl text-xs space-y-6">
-            <div className="flex items-center justify-between pb-4 border-b border-gray-200">
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-3 sm:p-6 overflow-hidden">
+          <div className="bg-white border border-gray-200 rounded-[32px] max-w-4xl w-full max-h-[85vh] flex flex-col shadow-2xl overflow-hidden">
+            
+            {/* Modal Header (Fixed Top) */}
+            <div className="flex items-center justify-between p-6 sm:px-8 sm:py-5 border-b border-gray-200 bg-white shrink-0">
               <div>
                 <h2 className="text-xl font-black text-[#0F1115]">
                   {editingProject.id?.startsWith("project-") ? "Add New Case Study Project" : `Edit Case Study: ${editingProject.title}`}
@@ -1070,346 +1072,352 @@ export default function AdminPage() {
                 </p>
               </div>
               <button
+                type="button"
                 onClick={() => setIsProjectModalOpen(false)}
-                className="text-gray-400 hover:text-black text-xl font-bold"
+                className="w-9 h-9 rounded-full bg-gray-100 hover:bg-gray-200 text-gray-600 hover:text-black flex items-center justify-center text-base font-bold transition-colors"
               >
                 ✕
               </button>
             </div>
 
-            <form onSubmit={handleSaveProject} className="space-y-6">
-              
-              {/* Basic Meta Info */}
-              <div className="space-y-3">
-                <h3 className="font-extrabold text-sm text-indigo-600 uppercase tracking-wider">1. Basic Info & Tagging</h3>
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                  <div>
-                    <label className="block font-bold text-gray-700 mb-1">Project Slug / ID</label>
-                    <input
-                      type="text"
-                      required
-                      value={editingProject.id || ""}
-                      onChange={(e) => setEditingProject({ ...editingProject, id: e.target.value })}
-                      className="w-full px-3 py-2 rounded-xl bg-gray-50 border border-gray-200 text-xs"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block font-bold text-gray-700 mb-1">Category</label>
-                    <input
-                      type="text"
-                      required
-                      value={editingProject.category || ""}
-                      onChange={(e) => setEditingProject({ ...editingProject, category: e.target.value })}
-                      className="w-full px-3 py-2 rounded-xl bg-gray-50 border border-gray-200 text-xs"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block font-bold text-gray-700 mb-1">Tag (Featured / Resume)</label>
-                    <select
-                      value={editingProject.tag || "Featured Project"}
-                      onChange={(e) => setEditingProject({ ...editingProject, tag: e.target.value })}
-                      className="w-full px-3 py-2 rounded-xl bg-gray-50 border border-gray-200 text-xs"
-                    >
-                      <option value="Featured Project">Featured Project</option>
-                      <option value="Resume Project">Resume Project</option>
-                      <option value="Technical Project">Technical Project</option>
-                    </select>
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div>
-                    <label className="block font-bold text-gray-700 mb-1">Project Title</label>
-                    <input
-                      type="text"
-                      required
-                      value={editingProject.title || ""}
-                      onChange={(e) => setEditingProject({ ...editingProject, title: e.target.value })}
-                      className="w-full px-3 py-2 rounded-xl bg-gray-50 border border-gray-200 text-xs"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block font-bold text-gray-700 mb-1">Subtitle Banner</label>
-                    <input
-                      type="text"
-                      value={editingProject.subtitle || ""}
-                      onChange={(e) => setEditingProject({ ...editingProject, subtitle: e.target.value })}
-                      className="w-full px-3 py-2 rounded-xl bg-gray-50 border border-gray-200 text-xs"
-                    />
-                  </div>
-                </div>
-              </div>
-
-              {/* Role, Timeline & Figma Links */}
-              <div className="space-y-3 pt-3 border-t border-gray-200">
-                <h3 className="font-extrabold text-sm text-indigo-600 uppercase tracking-wider">2. Role, Tools & Figma Links</h3>
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                  <div>
-                    <label className="block font-bold text-gray-700 mb-1">Designer Role</label>
-                    <input
-                      type="text"
-                      value={editingProject.role || ""}
-                      onChange={(e) => setEditingProject({ ...editingProject, role: e.target.value })}
-                      className="w-full px-3 py-2 rounded-xl bg-gray-50 border border-gray-200 text-xs"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block font-bold text-gray-700 mb-1">Timeline</label>
-                    <input
-                      type="text"
-                      value={editingProject.timeline || ""}
-                      onChange={(e) => setEditingProject({ ...editingProject, timeline: e.target.value })}
-                      className="w-full px-3 py-2 rounded-xl bg-gray-50 border border-gray-200 text-xs"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block font-bold text-gray-700 mb-1">Tools (Comma separated)</label>
-                    <input
-                      type="text"
-                      value={editingProject.tools ? editingProject.tools.join(", ") : ""}
-                      onChange={(e) => setEditingProject({ ...editingProject, tools: e.target.value.split(",").map(t => t.trim()) })}
-                      className="w-full px-3 py-2 rounded-xl bg-gray-50 border border-gray-200 text-xs"
-                    />
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div>
-                    <label className="block font-bold text-gray-700 mb-1">Figma Design File URL</label>
-                    <input
-                      type="text"
-                      value={editingProject.figmaUrl || ""}
-                      onChange={(e) => setEditingProject({ ...editingProject, figmaUrl: e.target.value })}
-                      className="w-full px-3 py-2 rounded-xl bg-gray-50 border border-gray-200 text-xs"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block font-bold text-gray-700 mb-1">Figma Canvas Embed URL</label>
-                    <input
-                      type="text"
-                      value={editingProject.figmaEmbedUrl || ""}
-                      onChange={(e) => setEditingProject({ ...editingProject, figmaEmbedUrl: e.target.value })}
-                      className="w-full px-3 py-2 rounded-xl bg-gray-50 border border-gray-200 text-xs"
-                    />
-                  </div>
-                </div>
-              </div>
-
-              {/* Case Study Content Breakdown */}
-              <div className="space-y-3 pt-3 border-t border-gray-200">
-                <h3 className="font-extrabold text-sm text-indigo-600 uppercase tracking-wider">3. Case Study Breakdown</h3>
+            {/* Modal Form Content (Scrollable Middle Body) */}
+            <div className="p-6 sm:p-8 overflow-y-auto custom-modal-scrollbar text-xs flex-grow">
+              <form id="projectForm" onSubmit={handleSaveProject} className="space-y-6">
                 
-                <div>
-                  <label className="block font-bold text-gray-700 mb-1">Short Card Summary</label>
-                  <textarea
-                    rows={2}
-                    value={editingProject.summary || ""}
-                    onChange={(e) => setEditingProject({ ...editingProject, summary: e.target.value })}
-                    className="w-full px-3 py-2 rounded-xl bg-gray-50 border border-gray-200 text-xs"
-                  />
-                </div>
-
-                <div>
-                  <label className="block font-bold text-red-600 mb-1">01. The Challenge (Problem Statement)</label>
-                  <textarea
-                    rows={3}
-                    value={editingProject.problemStatement || ""}
-                    onChange={(e) => setEditingProject({ ...editingProject, problemStatement: e.target.value })}
-                    className="w-full px-3 py-2 rounded-xl bg-gray-50 border border-gray-200 text-xs"
-                  />
-                </div>
-
-                <div>
-                  <label className="block font-bold text-emerald-600 mb-1">02. The Approach & Solution (Design Solution)</label>
-                  <textarea
-                    rows={3}
-                    value={editingProject.solution || ""}
-                    onChange={(e) => setEditingProject({ ...editingProject, solution: e.target.value })}
-                    className="w-full px-3 py-2 rounded-xl bg-gray-50 border border-gray-200 text-xs"
-                  />
-                </div>
-
-                <div>
-                  <label className="block font-bold text-indigo-700 mb-1">Research Insights & UX Methodology (One bullet per line)</label>
-                  <textarea
-                    rows={4}
-                    value={editingProject.researchHighlights ? editingProject.researchHighlights.join("\n") : ""}
-                    onChange={(e) => setEditingProject({ ...editingProject, researchHighlights: e.target.value.split("\n").filter(Boolean) })}
-                    className="w-full px-3 py-2 rounded-xl bg-gray-50 border border-gray-200 text-xs font-mono"
-                  />
-                </div>
-              </div>
-
-              {/* 03. Key Features / Core Functionality Editor */}
-              <div className="space-y-3 pt-3 border-t border-gray-200">
-                <div className="flex items-center justify-between">
-                  <h3 className="font-extrabold text-sm text-indigo-600 uppercase tracking-wider">
-                    4. Key Application Features (03. Core Functionality)
-                  </h3>
-                  <button
-                    type="button"
-                    onClick={() =>
-                      setEditingProject({
-                        ...editingProject,
-                        keyFeatures: [...(editingProject.keyFeatures || []), { title: "New Feature", description: "Feature description..." }],
-                      })
-                    }
-                    className="px-3 py-1 rounded-full bg-indigo-50 text-indigo-700 font-bold text-xs border border-indigo-200 hover:bg-indigo-100"
-                  >
-                    + Add Feature Card
-                  </button>
-                </div>
-
+                {/* Basic Meta Info */}
                 <div className="space-y-3">
-                  {editingProject.keyFeatures?.map((feat, idx) => (
-                    <div key={idx} className="p-3 rounded-2xl bg-gray-50 border border-gray-200 flex flex-col gap-2 relative group">
-                      <div className="flex items-center justify-between">
-                        <span className="font-bold text-xs text-indigo-600">Feature Card 0{idx + 1}</span>
+                  <h3 className="font-extrabold text-sm text-indigo-600 uppercase tracking-wider">1. Basic Info & Tagging</h3>
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <div>
+                      <label className="block font-bold text-gray-700 mb-1">Project Slug / ID</label>
+                      <input
+                        type="text"
+                        required
+                        value={editingProject.id || ""}
+                        onChange={(e) => setEditingProject({ ...editingProject, id: e.target.value })}
+                        className="w-full px-3 py-2 rounded-xl bg-gray-50 border border-gray-200 text-xs"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block font-bold text-gray-700 mb-1">Category</label>
+                      <input
+                        type="text"
+                        required
+                        value={editingProject.category || ""}
+                        onChange={(e) => setEditingProject({ ...editingProject, category: e.target.value })}
+                        className="w-full px-3 py-2 rounded-xl bg-gray-50 border border-gray-200 text-xs"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block font-bold text-gray-700 mb-1">Tag (Featured / Resume)</label>
+                      <select
+                        value={editingProject.tag || "Featured Project"}
+                        onChange={(e) => setEditingProject({ ...editingProject, tag: e.target.value })}
+                        className="w-full px-3 py-2 rounded-xl bg-gray-50 border border-gray-200 text-xs"
+                      >
+                        <option value="Featured Project">Featured Project</option>
+                        <option value="Resume Project">Resume Project</option>
+                        <option value="Technical Project">Technical Project</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block font-bold text-gray-700 mb-1">Project Title</label>
+                      <input
+                        type="text"
+                        required
+                        value={editingProject.title || ""}
+                        onChange={(e) => setEditingProject({ ...editingProject, title: e.target.value })}
+                        className="w-full px-3 py-2 rounded-xl bg-gray-50 border border-gray-200 text-xs"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block font-bold text-gray-700 mb-1">Subtitle Banner</label>
+                      <input
+                        type="text"
+                        value={editingProject.subtitle || ""}
+                        onChange={(e) => setEditingProject({ ...editingProject, subtitle: e.target.value })}
+                        className="w-full px-3 py-2 rounded-xl bg-gray-50 border border-gray-200 text-xs"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Role, Timeline & Figma Links */}
+                <div className="space-y-3 pt-3 border-t border-gray-200">
+                  <h3 className="font-extrabold text-sm text-indigo-600 uppercase tracking-wider">2. Role, Tools & Figma Links</h3>
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <div>
+                      <label className="block font-bold text-gray-700 mb-1">Designer Role</label>
+                      <input
+                        type="text"
+                        value={editingProject.role || ""}
+                        onChange={(e) => setEditingProject({ ...editingProject, role: e.target.value })}
+                        className="w-full px-3 py-2 rounded-xl bg-gray-50 border border-gray-200 text-xs"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block font-bold text-gray-700 mb-1">Timeline</label>
+                      <input
+                        type="text"
+                        value={editingProject.timeline || ""}
+                        onChange={(e) => setEditingProject({ ...editingProject, timeline: e.target.value })}
+                        className="w-full px-3 py-2 rounded-xl bg-gray-50 border border-gray-200 text-xs"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block font-bold text-gray-700 mb-1">Tools (Comma separated)</label>
+                      <input
+                        type="text"
+                        value={editingProject.tools ? editingProject.tools.join(", ") : ""}
+                        onChange={(e) => setEditingProject({ ...editingProject, tools: e.target.value.split(",").map(t => t.trim()) })}
+                        className="w-full px-3 py-2 rounded-xl bg-gray-50 border border-gray-200 text-xs"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block font-bold text-gray-700 mb-1">Figma Design File URL</label>
+                      <input
+                        type="text"
+                        value={editingProject.figmaUrl || ""}
+                        onChange={(e) => setEditingProject({ ...editingProject, figmaUrl: e.target.value })}
+                        className="w-full px-3 py-2 rounded-xl bg-gray-50 border border-gray-200 text-xs"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block font-bold text-gray-700 mb-1">Figma Canvas Embed URL</label>
+                      <input
+                        type="text"
+                        value={editingProject.figmaEmbedUrl || ""}
+                        onChange={(e) => setEditingProject({ ...editingProject, figmaEmbedUrl: e.target.value })}
+                        className="w-full px-3 py-2 rounded-xl bg-gray-50 border border-gray-200 text-xs"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Case Study Content Breakdown */}
+                <div className="space-y-3 pt-3 border-t border-gray-200">
+                  <h3 className="font-extrabold text-sm text-indigo-600 uppercase tracking-wider">3. Case Study Breakdown</h3>
+                  
+                  <div>
+                    <label className="block font-bold text-gray-700 mb-1">Short Card Summary</label>
+                    <textarea
+                      rows={2}
+                      value={editingProject.summary || ""}
+                      onChange={(e) => setEditingProject({ ...editingProject, summary: e.target.value })}
+                      className="w-full px-3 py-2 rounded-xl bg-gray-50 border border-gray-200 text-xs"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block font-bold text-red-600 mb-1">01. The Challenge (Problem Statement)</label>
+                    <textarea
+                      rows={3}
+                      value={editingProject.problemStatement || ""}
+                      onChange={(e) => setEditingProject({ ...editingProject, problemStatement: e.target.value })}
+                      className="w-full px-3 py-2 rounded-xl bg-gray-50 border border-gray-200 text-xs"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block font-bold text-emerald-600 mb-1">02. The Approach & Solution (Design Solution)</label>
+                    <textarea
+                      rows={3}
+                      value={editingProject.solution || ""}
+                      onChange={(e) => setEditingProject({ ...editingProject, solution: e.target.value })}
+                      className="w-full px-3 py-2 rounded-xl bg-gray-50 border border-gray-200 text-xs"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block font-bold text-indigo-700 mb-1">Research Insights & UX Methodology (One bullet per line)</label>
+                    <textarea
+                      rows={4}
+                      value={editingProject.researchHighlights ? editingProject.researchHighlights.join("\n") : ""}
+                      onChange={(e) => setEditingProject({ ...editingProject, researchHighlights: e.target.value.split("\n").filter(Boolean) })}
+                      className="w-full px-3 py-2 rounded-xl bg-gray-50 border border-gray-200 text-xs font-mono"
+                    />
+                  </div>
+                </div>
+
+                {/* 03. Key Features / Core Functionality Editor */}
+                <div className="space-y-3 pt-3 border-t border-gray-200">
+                  <div className="flex items-center justify-between">
+                    <h3 className="font-extrabold text-sm text-indigo-600 uppercase tracking-wider">
+                      4. Key Application Features (03. Core Functionality)
+                    </h3>
+                    <button
+                      type="button"
+                      onClick={() =>
+                        setEditingProject({
+                          ...editingProject,
+                          keyFeatures: [...(editingProject.keyFeatures || []), { title: "New Feature", description: "Feature description..." }],
+                        })
+                      }
+                      className="px-3 py-1 rounded-full bg-indigo-50 text-indigo-700 font-bold text-xs border border-indigo-200 hover:bg-indigo-100"
+                    >
+                      + Add Feature Card
+                    </button>
+                  </div>
+
+                  <div className="space-y-3">
+                    {editingProject.keyFeatures?.map((feat, idx) => (
+                      <div key={idx} className="p-3 rounded-2xl bg-gray-50 border border-gray-200 flex flex-col gap-2 relative group">
+                        <div className="flex items-center justify-between">
+                          <span className="font-bold text-xs text-indigo-600">Feature Card 0{idx + 1}</span>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              const updated = [...(editingProject.keyFeatures || [])];
+                              updated.splice(idx, 1);
+                              setEditingProject({ ...editingProject, keyFeatures: updated });
+                            }}
+                            className="text-red-500 font-bold hover:underline text-xs"
+                          >
+                            Remove Card
+                          </button>
+                        </div>
+                        <input
+                          type="text"
+                          placeholder="Feature Title..."
+                          value={feat.title}
+                          onChange={(e) => {
+                            const updated = [...(editingProject.keyFeatures || [])];
+                            updated[idx].title = e.target.value;
+                            setEditingProject({ ...editingProject, keyFeatures: updated });
+                          }}
+                          className="w-full px-3 py-1.5 rounded-lg bg-white border border-gray-200 text-xs font-bold"
+                        />
+                        <textarea
+                          rows={2}
+                          placeholder="Feature Description..."
+                          value={feat.description}
+                          onChange={(e) => {
+                            const updated = [...(editingProject.keyFeatures || [])];
+                            updated[idx].description = e.target.value;
+                            setEditingProject({ ...editingProject, keyFeatures: updated });
+                          }}
+                          className="w-full px-3 py-1.5 rounded-lg bg-white border border-gray-200 text-xs"
+                        />
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Color Palette & Tokens Swatches Editor */}
+                <div className="space-y-3 pt-3 border-t border-gray-200">
+                  <div className="flex items-center justify-between">
+                    <h3 className="font-extrabold text-sm text-indigo-600 uppercase tracking-wider">
+                      5. Color Palette & Tokens Swatches
+                    </h3>
+                    <button
+                      type="button"
+                      onClick={() =>
+                        setEditingProject({
+                          ...editingProject,
+                          colorPalette: [...(editingProject.colorPalette || []), { name: "New Color", hex: "#6366F1" }],
+                        })
+                      }
+                      className="px-3 py-1 rounded-full bg-indigo-50 text-indigo-700 font-bold text-xs border border-indigo-200 hover:bg-indigo-100"
+                    >
+                      + Add Swatch
+                    </button>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    {editingProject.colorPalette?.map((swatch, idx) => (
+                      <div key={idx} className="p-3 rounded-2xl bg-gray-50 border border-gray-200 flex items-center gap-3">
+                        <div
+                          className="w-8 h-8 rounded-xl shrink-0 border border-gray-300 shadow-xs"
+                          style={{ backgroundColor: swatch.hex || "#000000" }}
+                        />
+                        <div className="flex-grow grid grid-cols-2 gap-2">
+                          <input
+                            type="text"
+                            placeholder="Name (e.g. Obsidian Black)"
+                            value={swatch.name}
+                            onChange={(e) => {
+                              const updated = [...(editingProject.colorPalette || [])];
+                              updated[idx].name = e.target.value;
+                              setEditingProject({ ...editingProject, colorPalette: updated });
+                            }}
+                            className="px-2.5 py-1 rounded-lg bg-white border border-gray-200 text-xs font-bold"
+                          />
+                          <input
+                            type="text"
+                            placeholder="HEX (e.g. #0F1115)"
+                            value={swatch.hex}
+                            onChange={(e) => {
+                              const updated = [...(editingProject.colorPalette || [])];
+                              updated[idx].hex = e.target.value;
+                              setEditingProject({ ...editingProject, colorPalette: updated });
+                            }}
+                            className="px-2.5 py-1 rounded-lg bg-white border border-gray-200 text-xs font-mono"
+                          />
+                        </div>
                         <button
                           type="button"
                           onClick={() => {
-                            const updated = [...(editingProject.keyFeatures || [])];
+                            const updated = [...(editingProject.colorPalette || [])];
                             updated.splice(idx, 1);
-                            setEditingProject({ ...editingProject, keyFeatures: updated });
+                            setEditingProject({ ...editingProject, colorPalette: updated });
                           }}
-                          className="text-red-500 font-bold hover:underline text-xs"
+                          className="text-red-500 font-bold hover:text-red-700 p-1"
                         >
-                          Remove Card
+                          ✕
                         </button>
                       </div>
-                      <input
-                        type="text"
-                        placeholder="Feature Title..."
-                        value={feat.title}
-                        onChange={(e) => {
-                          const updated = [...(editingProject.keyFeatures || [])];
-                          updated[idx].title = e.target.value;
-                          setEditingProject({ ...editingProject, keyFeatures: updated });
-                        }}
-                        className="w-full px-3 py-1.5 rounded-lg bg-white border border-gray-200 text-xs font-bold"
-                      />
-                      <textarea
-                        rows={2}
-                        placeholder="Feature Description..."
-                        value={feat.description}
-                        onChange={(e) => {
-                          const updated = [...(editingProject.keyFeatures || [])];
-                          updated[idx].description = e.target.value;
-                          setEditingProject({ ...editingProject, keyFeatures: updated });
-                        }}
-                        className="w-full px-3 py-1.5 rounded-lg bg-white border border-gray-200 text-xs"
-                      />
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* Color Palette & Tokens Swatches Editor */}
-              <div className="space-y-3 pt-3 border-t border-gray-200">
-                <div className="flex items-center justify-between">
-                  <h3 className="font-extrabold text-sm text-indigo-600 uppercase tracking-wider">
-                    5. Color Palette & Tokens Swatches
-                  </h3>
-                  <button
-                    type="button"
-                    onClick={() =>
-                      setEditingProject({
-                        ...editingProject,
-                        colorPalette: [...(editingProject.colorPalette || []), { name: "New Color", hex: "#6366F1" }],
-                      })
-                    }
-                    className="px-3 py-1 rounded-full bg-indigo-50 text-indigo-700 font-bold text-xs border border-indigo-200 hover:bg-indigo-100"
-                  >
-                    + Add Swatch
-                  </button>
+                    ))}
+                  </div>
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  {editingProject.colorPalette?.map((swatch, idx) => (
-                    <div key={idx} className="p-3 rounded-2xl bg-gray-50 border border-gray-200 flex items-center gap-3">
-                      <div
-                        className="w-8 h-8 rounded-xl shrink-0 border border-gray-300 shadow-xs"
-                        style={{ backgroundColor: swatch.hex || "#000000" }}
-                      />
-                      <div className="flex-grow grid grid-cols-2 gap-2">
-                        <input
-                          type="text"
-                          placeholder="Name (e.g. Obsidian Black)"
-                          value={swatch.name}
-                          onChange={(e) => {
-                            const updated = [...(editingProject.colorPalette || [])];
-                            updated[idx].name = e.target.value;
-                            setEditingProject({ ...editingProject, colorPalette: updated });
-                          }}
-                          className="px-2.5 py-1 rounded-lg bg-white border border-gray-200 text-xs font-bold"
-                        />
-                        <input
-                          type="text"
-                          placeholder="HEX (e.g. #0F1115)"
-                          value={swatch.hex}
-                          onChange={(e) => {
-                            const updated = [...(editingProject.colorPalette || [])];
-                            updated[idx].hex = e.target.value;
-                            setEditingProject({ ...editingProject, colorPalette: updated });
-                          }}
-                          className="px-2.5 py-1 rounded-lg bg-white border border-gray-200 text-xs font-mono"
-                        />
-                      </div>
-                      <button
-                        type="button"
-                        onClick={() => {
-                          const updated = [...(editingProject.colorPalette || [])];
-                          updated.splice(idx, 1);
-                          setEditingProject({ ...editingProject, colorPalette: updated });
-                        }}
-                        className="text-red-500 font-bold hover:text-red-700 p-1"
-                      >
-                        ✕
-                      </button>
-                    </div>
-                  ))}
+                {/* Cover Image Uploader */}
+                <div className="p-4 rounded-2xl bg-gray-50 border border-gray-200 space-y-3 pt-3 border-t border-gray-200">
+                  <label className="block font-bold text-indigo-700 flex items-center gap-1.5">
+                    <Upload className="w-4 h-4 text-indigo-600" />
+                    <span>Upload Main Cover Image (Base64 Auto-Convert)</span>
+                  </label>
+
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) => handleImageFileUpload(e, (base64) => setEditingProject({ ...editingProject, image: base64 }))}
+                    className="text-xs text-gray-600 file:mr-3 file:py-1.5 file:px-3 file:rounded-full file:border-0 file:text-xs file:font-bold file:bg-indigo-600 file:text-white cursor-pointer"
+                  />
                 </div>
-              </div>
 
-              {/* Cover Image Uploader */}
-              <div className="p-4 rounded-2xl bg-gray-50 border border-gray-200 space-y-3 pt-3 border-t border-gray-200">
-                <label className="block font-bold text-indigo-700 flex items-center gap-1.5">
-                  <Upload className="w-4 h-4 text-indigo-600" />
-                  <span>Upload Main Cover Image (Base64 Auto-Convert)</span>
-                </label>
+              </form>
+            </div>
 
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={(e) => handleImageFileUpload(e, (base64) => setEditingProject({ ...editingProject, image: base64 }))}
-                  className="text-xs text-gray-600 file:mr-3 file:py-1.5 file:px-3 file:rounded-full file:border-0 file:text-xs file:font-bold file:bg-indigo-600 file:text-white cursor-pointer"
-                />
-              </div>
+            {/* Modal Footer (Fixed Bottom) */}
+            <div className="p-4 sm:px-8 border-t border-gray-200 bg-gray-50 flex items-center justify-end gap-3 shrink-0">
+              <button
+                type="button"
+                onClick={() => setIsProjectModalOpen(false)}
+                className="px-5 py-2.5 rounded-full bg-white border border-gray-200 hover:bg-gray-100 font-bold text-gray-700 shadow-xs"
+              >
+                Cancel
+              </button>
+              <button
+                type="submit"
+                form="projectForm"
+                className="px-7 py-2.5 rounded-full bg-indigo-600 hover:bg-indigo-700 font-bold text-white shadow-md active:scale-95 transition-all"
+              >
+                Save Full Case Study
+              </button>
+            </div>
 
-              {/* Save & Cancel Bar */}
-              <div className="pt-4 flex justify-end gap-3 border-t border-gray-200 sticky bottom-0 bg-white py-3">
-                <button
-                  type="button"
-                  onClick={() => setIsProjectModalOpen(false)}
-                  className="px-5 py-2.5 rounded-full bg-gray-100 hover:bg-gray-200 font-bold text-gray-700"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  className="px-6 py-2.5 rounded-full bg-indigo-600 hover:bg-indigo-700 font-bold text-white shadow-md active:scale-95"
-                >
-                  Save Full Case Study
-                </button>
-              </div>
-
-            </form>
           </div>
         </div>
       )}

@@ -57,13 +57,27 @@ body {
   background: #6366F1;
 }
 
+/* Sleek Custom Modal Scrollbar */
+.custom-modal-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.custom-modal-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+  margin: 8px 0;
+}
+
+.custom-modal-scrollbar::-webkit-scrollbar-thumb {
+  background: #CBD5E1;
+  border-radius: 9999px;
+}
+
+.custom-modal-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #6366F1;
+}
+
 /* Display Font Class */
 .font-display {
   font-family: var(--font-space-grotesk), sans-serif;
   letter-spacing: -0.03em;
 }
-
-
-
-
-
