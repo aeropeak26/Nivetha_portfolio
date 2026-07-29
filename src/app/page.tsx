@@ -7,6 +7,7 @@ import PortaviaTestimonials from "@/components/PortaviaTestimonials";
 import PortaviaFaq from "@/components/PortaviaFaq";
 import PortaviaBlogs from "@/components/PortaviaBlogs";
 import PortaviaContact from "@/components/PortaviaContact";
+import Footer from "@/components/Footer";
 
 export default function Home() {
   return (
@@ -20,6 +21,7 @@ export default function Home() {
       <PortaviaFaq />
       <PortaviaBlogs />
       <PortaviaContact />
+      <Footer />
     </main>
   );
 }
