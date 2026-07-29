@@ -5,7 +5,7 @@ import { profileData } from "@/data/profileData";
 
 export async function POST() {
   try {
-    // 1. Seed Profile
+    // 1. Seed Profile Table
     const { error: profileError } = await supabase.from("profile").upsert({
       id: 1,
       name: profileData.name,
@@ -16,16 +16,20 @@ export async function POST() {
       email: profileData.email,
       phone: profileData.phone,
       bio: profileData.bio,
+      hero_title: profileData.heroTitle,
+      hero_subtitle: profileData.heroSubtitle,
+      hero_tagline: profileData.heroTagline,
       education: profileData.education,
       skills: profileData.skills,
       technical_skills: profileData.technicalSkills,
       tools: profileData.tools,
       socials: profileData.socials,
       stats: profileData.stats,
+      services: profileData.services,
       updated_at: new Date().toISOString(),
     });
 
-    // 2. Seed Projects
+    // 2. Seed Projects Table
     const projectsPayload = projectsData.map((project) => ({
       id: project.id,
       title: project.title,
@@ -53,6 +57,22 @@ export async function POST() {
       .from("projects")
       .upsert(projectsPayload);
 
+    const isMissingTable =
+      profileError?.code === "42P01" ||
+      projectsError?.code === "42P01" ||
+      profileError?.message?.includes("does not exist") ||
+      projectsError?.message?.includes("does not exist");
+
+    if (isMissingTable) {
+      return NextResponse.json({
+        success: false,
+        error: "Database tables ('projects' or 'profile') have not been created in Supabase yet.",
+        tableMissing: true,
+        sqlSchema: getSqlSchema(),
+        instructions: "Copy the SQL script below, open Supabase SQL Editor (https://supabase.com/dashboard), paste & click Run!",
+      });
+    }
+
     if (profileError || projectsError) {
       return NextResponse.json({
         success: false,
@@ -64,7 +84,7 @@ export async function POST() {
 
     return NextResponse.json({
       success: true,
-      message: "Database successfully seeded with website profile & projects!",
+      message: "Database tables populated and synced with all website data successfully!",
       sqlSchema: getSqlSchema(),
     });
   } catch (err: unknown) {
@@ -86,7 +106,13 @@ export async function GET() {
 
 function getSqlSchema() {
   return `
--- SQL Schema Definition for Supabase Database
+-- ===================================================
+-- NIVETHA VELUSAMY PORTFOLIO - SUPABASE TABLE DDL
+-- Paste & Run in Supabase SQL Editor:
+-- https://supabase.com/dashboard/project/iowejpqoezjjfrecqiip/sql
+-- ===================================================
+
+-- 1. Create Profile Table
 CREATE TABLE IF NOT EXISTS profile (
   id INT PRIMARY KEY DEFAULT 1,
   name TEXT NOT NULL,
@@ -97,22 +123,27 @@ CREATE TABLE IF NOT EXISTS profile (
   email TEXT,
   phone TEXT,
   bio TEXT,
+  hero_title TEXT,
+  hero_subtitle TEXT,
+  hero_tagline TEXT,
   education JSONB,
   skills JSONB,
   technical_skills JSONB,
   tools JSONB,
   socials JSONB,
   stats JSONB,
+  services JSONB,
   updated_at TIMESTAMPTZ DEFAULT NOW()
 );
 
+-- 2. Create Projects Table
 CREATE TABLE IF NOT EXISTS projects (
   id TEXT PRIMARY KEY,
   title TEXT NOT NULL,
   subtitle TEXT,
   category TEXT,
   tag TEXT,
-  image TEXT, -- Holds Base64 string or URL
+  image TEXT, -- Holds Base64 Data URL or Image Link
   figma_url TEXT,
   live_preview_url TEXT,
   role TEXT,
@@ -129,5 +160,15 @@ CREATE TABLE IF NOT EXISTS projects (
   created_at TIMESTAMPTZ DEFAULT NOW(),
   updated_at TIMESTAMPTZ DEFAULT NOW()
 );
+
+-- Enable Row Level Security (RLS) & Allow Read/Write
+ALTER TABLE profile ENABLE ROW LEVEL SECURITY;
+ALTER TABLE projects ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Allow public read profile" ON profile FOR SELECT USING (true);
+CREATE POLICY "Allow public write profile" ON profile FOR ALL USING (true);
+
+CREATE POLICY "Allow public read projects" ON projects FOR SELECT USING (true);
+CREATE POLICY "Allow public write projects" ON projects FOR ALL USING (true);
   `.trim();
 }

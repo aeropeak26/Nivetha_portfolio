@@ -9,11 +9,29 @@ export async function GET() {
       .select("*")
       .order("created_at", { ascending: false });
 
-    if (error || !data || data.length === 0) {
-      return NextResponse.json({ success: true, data: projectsData, source: "local" });
+    if (error) {
+      const isTableMissing = error.code === "42P01" || error.message?.includes("does not exist");
+      return NextResponse.json({
+        success: true,
+        data: projectsData,
+        source: "local_fallback",
+        tableExists: !isTableMissing,
+        warning: isTableMissing
+          ? "Table 'projects' does not exist in Supabase yet. Please run SQL DDL script."
+          : error.message,
+      });
     }
 
-    // Format DB data to match Project interface
+    if (!data || data.length === 0) {
+      return NextResponse.json({
+        success: true,
+        data: projectsData,
+        source: "local_fallback",
+        tableExists: true,
+      });
+    }
+
+    // Format DB records to Project interface
     const formattedData = data.map((item) => ({
       id: item.id,
       title: item.title,
@@ -36,9 +54,19 @@ export async function GET() {
       interactivePreviewType: item.interactive_preview_type || item.interactivePreviewType || "figma",
     }));
 
-    return NextResponse.json({ success: true, data: formattedData, source: "supabase" });
+    return NextResponse.json({
+      success: true,
+      data: formattedData,
+      source: "supabase",
+      tableExists: true,
+    });
   } catch {
-    return NextResponse.json({ success: true, data: projectsData, source: "local" });
+    return NextResponse.json({
+      success: true,
+      data: projectsData,
+      source: "local_fallback",
+      tableExists: false,
+    });
   }
 }
 
@@ -52,7 +80,7 @@ export async function POST(request: Request) {
       subtitle: body.subtitle || "",
       category: body.category || "UI/UX Design",
       tag: body.tag || "Featured Project",
-      image: body.image, // Supports Base64 encoded string data:image/...
+      image: body.image, // Holds Base64 string or URL
       figma_url: body.figmaUrl || "#",
       live_preview_url: body.livePreviewUrl || "",
       role: body.role || "UI/UX Designer",
@@ -75,13 +103,20 @@ export async function POST(request: Request) {
       .select();
 
     if (error) {
+      const isTableMissing = error.code === "42P01" || error.message?.includes("does not exist");
       return NextResponse.json(
-        { success: false, error: error.message },
+        {
+          success: false,
+          error: isTableMissing
+            ? "Table 'projects' does not exist in Supabase. Please click 'Auto-Create & Sync Database' or run SQL DDL."
+            : error.message,
+          tableExists: false,
+        },
         { status: 500 }
       );
     }
 
-    return NextResponse.json({ success: true, data: data[0] });
+    return NextResponse.json({ success: true, data: data[0], tableExists: true });
   } catch (err: unknown) {
     const message = err instanceof Error ? err.message : "Internal Server Error";
     return NextResponse.json(

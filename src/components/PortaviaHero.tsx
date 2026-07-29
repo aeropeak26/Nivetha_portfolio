@@ -1,12 +1,30 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { profileData } from "@/data/profileData";
-import { ArrowRight, Sparkles, FolderKanban, Download } from "lucide-react";
+import { profileData as fallbackProfile, ProfileData } from "@/data/profileData";
+import { ArrowRight, Sparkles, FolderKanban } from "lucide-react";
 
 export default function PortaviaHero() {
+  const [profile, setProfile] = useState<ProfileData>(fallbackProfile);
+
+  useEffect(() => {
+    async function loadProfile() {
+      try {
+        const res = await fetch("/api/profile");
+        const json = await res.json();
+        if (json.success && json.data) {
+          setProfile((prev) => ({ ...prev, ...json.data }));
+        }
+      } catch (e) {
+        console.error("Failed to fetch dynamic hero data", e);
+      }
+    }
+    loadProfile();
+  }, []);
+
   return (
     <section id="hero" className="min-h-screen pt-28 pb-16 px-4 sm:px-8 flex flex-col justify-center items-center relative overflow-hidden bg-white text-[#0F1115]">
       
@@ -75,13 +93,13 @@ export default function PortaviaHero() {
           className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-indigo-50 border border-indigo-100 text-indigo-700 text-xs font-bold uppercase tracking-widest mb-6"
         >
           <Sparkles className="w-3.5 h-3.5" />
-          <span>NIVETHA VELUSAMY — PORTFOLIO</span>
+          <span>{profile.heroTagline || "NIVETHA VELUSAMY — PORTFOLIO"}</span>
         </motion.div>
 
         {/* Display Title Grid: UI / UX [ Profile Card ] DEVELOPER */}
         <div className="w-full flex flex-col lg:flex-row items-center justify-center gap-4 lg:gap-8">
           
-          {/* Left Title: UI / UX */}
+          {/* Left Title */}
           <motion.div
             initial={{ opacity: 0, x: -30 }}
             animate={{ opacity: 1, x: 0 }}
@@ -89,7 +107,7 @@ export default function PortaviaHero() {
             className="text-center lg:text-right"
           >
             <h1 className="text-5xl sm:text-7xl md:text-[5rem] lg:text-[6rem] xl:text-[7.5rem] font-black tracking-tighter text-[#0F1115] uppercase leading-none font-display">
-              UI / UX
+              {profile.heroTitle?.split(" ")[0] || "UI / UX"}
             </h1>
           </motion.div>
 
@@ -101,20 +119,20 @@ export default function PortaviaHero() {
             className="relative w-64 sm:w-80 md:w-96 lg:w-[360px] xl:w-[400px] aspect-[3/4] rounded-[40px] overflow-hidden shadow-2xl border-4 border-white ring-1 ring-gray-200/80 shrink-0 my-4 lg:my-0 group bg-gray-100"
           >
             <Image
-              src={profileData.avatar}
-              alt={profileData.name}
+              src={profile.avatar || "/images/Profile.png"}
+              alt={profile.name || "Nivetha Velusamy"}
               fill
               priority
               className="object-cover group-hover:scale-105 transition-transform duration-700"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
               <span className="text-white text-xs font-bold tracking-wide">
-                Nivetha Velusamy — UI/UX Designer
+                {profile.name} — {profile.shortRole}
               </span>
             </div>
           </motion.div>
 
-          {/* Right Title: DESIGNER */}
+          {/* Right Title */}
           <motion.div
             initial={{ opacity: 0, x: 30 }}
             animate={{ opacity: 1, x: 0 }}
@@ -122,10 +140,10 @@ export default function PortaviaHero() {
             className="text-center lg:text-left flex flex-col items-center lg:items-start"
           >
             <h1 className="text-5xl sm:text-7xl md:text-[5rem] lg:text-[6rem] xl:text-[7.5rem] font-black tracking-tighter text-[#0F1115] uppercase leading-none font-display">
-              DESIGNER
+              {profile.heroTitle?.split(" ").slice(1).join(" ") || "DESIGNER"}
             </h1>
             <p className="mt-4 text-xs sm:text-sm md:text-base text-gray-600 font-medium max-w-xs leading-relaxed text-center lg:text-left">
-              Crafting intuitive, user-centered digital solutions with clean visuals and front-end code.
+              {profile.heroSubtitle || "Crafting intuitive, user-centered digital solutions with clean visuals and front-end code."}
             </p>
           </motion.div>
 
