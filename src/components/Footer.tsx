@@ -1,38 +1,39 @@
 "use client";
 
 import Link from "next/link";
-import { Mail, ArrowUpRight, Globe, Code } from "lucide-react";
+import { Mail, ArrowUpRight } from "lucide-react";
 import { profileData } from "@/data/profileData";
 
 export default function Footer() {
   return (
-    <footer className="pt-12 bg-[#08090A]">
-      {/* Curved Arch Footer Container */}
-      <div className="max-w-6xl mx-auto bg-[#E5FE00] text-[#0B0C0E] rounded-t-3xl md:rounded-footer-arch px-6 sm:px-12 pt-14 pb-8 shadow-2xl">
+    <footer className="pt-16 pb-8 bg-[#F8F9FA] text-[#0F1115] border-t border-gray-200">
+      {/* Light Theme Footer Container */}
+      <div className="max-w-6xl mx-auto px-6 sm:px-10">
         
         {/* Top Header Row */}
-        <div className="flex flex-col lg:flex-row lg:items-start justify-between gap-8 pb-12 border-b border-[#0B0C0E]/15">
+        <div className="flex flex-col lg:flex-row lg:items-start justify-between gap-8 pb-10 border-b border-gray-200">
           <div className="max-w-md">
-            <Link href="/" className="flex items-center gap-2 mb-4">
-              <div className="w-9 h-9 rounded-full bg-[#0B0C0E] text-[#E5FE00] flex items-center justify-center font-black text-base">
+            <Link href="/" className="flex items-center gap-2.5 mb-3 group">
+              <div className="w-9 h-9 rounded-full bg-[#0F1115] text-white flex items-center justify-center font-black text-base group-hover:bg-indigo-600 transition-colors shadow-sm">
                 ✦
               </div>
-              <span className="font-extrabold text-2xl tracking-tight text-[#0B0C0E]">
+              <span className="font-black text-2xl tracking-tight text-[#0F1115] font-display">
                 Nivetha Velusamy
               </span>
             </Link>
-            <p className="text-sm font-medium text-[#0B0C0E]/80 leading-relaxed">
-              UI/UX Designer, Visual Designer & Front-End Developer. Crafting user-centered interfaces, modern design systems, and engaging digital solutions.
+            <p className="text-xs sm:text-sm font-medium text-gray-600 leading-relaxed">
+              UI/UX Designer, Visual Designer & Front-End Developer. Dedicated to crafting user-centered interfaces, intuitive design systems, and engaging web experiences.
             </p>
           </div>
 
+          {/* Social Icon Pills */}
           <div className="flex items-center gap-3">
             <a
               href="mailto:nivethav012@gmail.com"
-              className="w-10 h-10 rounded-full bg-[#0B0C0E] text-[#E5FE00] flex items-center justify-center hover:scale-110 transition-transform duration-200 shadow-md"
+              className="w-10 h-10 rounded-full bg-white border border-gray-200 text-[#0F1115] flex items-center justify-center hover:bg-[#0F1115] hover:text-white hover:border-[#0F1115] transition-all duration-200 shadow-sm"
               aria-label="Email"
             >
-              <Mail className="w-5 h-5" />
+              <Mail className="w-4 h-4" />
             </a>
 
             {/* LinkedIn Icon SVG */}
@@ -40,7 +41,7 @@ export default function Footer() {
               href={profileData.socials.linkedin}
               target="_blank"
               rel="noopener noreferrer"
-              className="w-10 h-10 rounded-full bg-[#0B0C0E] text-[#E5FE00] flex items-center justify-center hover:scale-110 transition-transform duration-200 shadow-md"
+              className="w-10 h-10 rounded-full bg-white border border-gray-200 text-[#0F1115] flex items-center justify-center hover:bg-indigo-600 hover:text-white hover:border-indigo-600 transition-all duration-200 shadow-sm"
               aria-label="LinkedIn"
             >
               <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24">
@@ -53,7 +54,7 @@ export default function Footer() {
               href={profileData.socials.github}
               target="_blank"
               rel="noopener noreferrer"
-              className="w-10 h-10 rounded-full bg-[#0B0C0E] text-[#E5FE00] flex items-center justify-center hover:scale-110 transition-transform duration-200 shadow-md"
+              className="w-10 h-10 rounded-full bg-white border border-gray-200 text-[#0F1115] flex items-center justify-center hover:bg-[#0F1115] hover:text-white hover:border-[#0F1115] transition-all duration-200 shadow-sm"
               aria-label="GitHub"
             >
               <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24">
@@ -64,69 +65,73 @@ export default function Footer() {
         </div>
 
         {/* Links Grid */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-8 py-12 text-sm">
-          {/* Featured Projects Column */}
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-8 py-10 text-xs sm:text-sm">
+          
+          {/* Featured Case Studies Column */}
           <div>
-            <h4 className="font-black text-base text-[#0B0C0E] uppercase tracking-wider mb-4">
-              Featured Case Studies
+            <h4 className="font-extrabold text-xs text-gray-400 uppercase tracking-widest mb-4">
+              FEATURED CASE STUDIES
             </h4>
-            <ul className="flex flex-col gap-2.5 font-semibold text-[#0B0C0E]/80">
-              <li><Link href="/projects/realestate-project" className="hover:underline">Real Estate Portal</Link></li>
-              <li><Link href="/projects/ecommerce-project" className="hover:underline">Luxura E-Commerce</Link></li>
-              <li><Link href="/projects/evento-app" className="hover:underline">Evento Management App</Link></li>
-              <li><Link href="/projects/crm-project" className="hover:underline">Apex CRM Dashboard</Link></li>
-              <li><Link href="/projects/dating-app" className="hover:underline">Connect Matchmaking App</Link></li>
+            <ul className="flex flex-col gap-2.5 font-semibold text-[#0F1115]">
+              <li><Link href="/projects/realestate-project" className="hover:text-indigo-600 transition-colors">Real Estate Portal</Link></li>
+              <li><Link href="/projects/ecommerce-project" className="hover:text-indigo-600 transition-colors">Luxura E-Commerce</Link></li>
+              <li><Link href="/projects/evento-app" className="hover:text-indigo-600 transition-colors">Evento Management App</Link></li>
+              <li><Link href="/projects/crm-project" className="hover:text-indigo-600 transition-colors">Apex CRM Dashboard</Link></li>
+              <li><Link href="/projects/dating-app" className="hover:text-indigo-600 transition-colors">Connect Matchmaking App</Link></li>
             </ul>
           </div>
 
           {/* Quick Links Column */}
           <div>
-            <h4 className="font-black text-base text-[#0B0C0E] uppercase tracking-wider mb-4">
-              Navigation
+            <h4 className="font-extrabold text-xs text-gray-400 uppercase tracking-widest mb-4">
+              NAVIGATION
             </h4>
-            <ul className="flex flex-col gap-2.5 font-semibold text-[#0B0C0E]/80">
-              <li><Link href="/" className="hover:underline">Home</Link></li>
-              <li><Link href="/#about" className="hover:underline">About & Credentials</Link></li>
-              <li><Link href="/projects" className="hover:underline">All Projects List</Link></li>
-              <li><Link href="/#services" className="hover:underline">Core Expertise</Link></li>
-              <li><Link href="/#contact" className="hover:underline">Contact Me</Link></li>
+            <ul className="flex flex-col gap-2.5 font-semibold text-[#0F1115]">
+              <li><Link href="/" className="hover:text-indigo-600 transition-colors">Home</Link></li>
+              <li><Link href="/#about" className="hover:text-indigo-600 transition-colors">About & Credentials</Link></li>
+              <li><Link href="/projects" className="hover:text-indigo-600 transition-colors">All Projects List</Link></li>
+              <li><Link href="/#services" className="hover:text-indigo-600 transition-colors">Core Expertise</Link></li>
+              <li><Link href="/#contact" className="hover:text-indigo-600 transition-colors">Contact Me</Link></li>
             </ul>
           </div>
 
-          {/* Connect Column */}
+          {/* Direct Contact Column */}
           <div>
-            <h4 className="font-black text-base text-[#0B0C0E] uppercase tracking-wider mb-4">
-              Direct Contact
+            <h4 className="font-extrabold text-xs text-gray-400 uppercase tracking-widest mb-4">
+              DIRECT CONTACT
             </h4>
-            <div className="flex flex-col gap-2.5 font-semibold text-[#0B0C0E]/80">
-              <a href="mailto:nivethav012@gmail.com" className="hover:underline flex items-center gap-1">
+            <div className="flex flex-col gap-2.5 font-semibold text-[#0F1115]">
+              <a href="mailto:nivethav012@gmail.com" className="hover:text-indigo-600 transition-colors flex items-center gap-1">
                 <span>nivethav012@gmail.com</span>
-                <ArrowUpRight className="w-3.5 h-3.5" />
+                <ArrowUpRight className="w-3.5 h-3.5 text-indigo-600" />
               </a>
               <p>+91 9677700740</p>
-              <p className="text-xs text-[#0B0C0E]/60 font-normal">Available for UI/UX & Web Development Roles</p>
+              <p className="text-[11px] text-gray-500 font-medium leading-tight mt-0.5">
+                Available for UI/UX & Web Development Roles
+              </p>
             </div>
           </div>
 
           {/* Location Column */}
           <div>
-            <h4 className="font-black text-base text-[#0B0C0E] uppercase tracking-wider mb-4">
-              Location
+            <h4 className="font-extrabold text-xs text-gray-400 uppercase tracking-widest mb-4">
+              LOCATION
             </h4>
-            <div className="flex flex-col gap-2 font-semibold text-[#0B0C0E]/80">
+            <div className="flex flex-col gap-1.5 font-semibold text-[#0F1115]">
               <p>Punjai Puliampatti</p>
               <p>Coimbatore, Tamil Nadu</p>
-              <p>India</p>
+              <p className="text-gray-500 font-medium">India</p>
             </div>
           </div>
+
         </div>
 
         {/* Bottom Bar */}
-        <div className="pt-8 border-t border-[#0B0C0E]/15 flex flex-col sm:flex-row items-center justify-between text-xs font-semibold text-[#0B0C0E]/70 gap-4">
+        <div className="pt-8 border-t border-gray-200 flex flex-col sm:flex-row items-center justify-between text-xs font-semibold text-gray-500 gap-4">
           <p>© 2026 Nivetha Velusamy. All rights reserved.</p>
-          <div className="flex gap-6">
-            <Link href="/projects" className="hover:underline">Browse Projects</Link>
-            <a href="mailto:nivethav012@gmail.com" className="hover:underline">Email Me</a>
+          <div className="flex items-center gap-6">
+            <Link href="/projects" className="hover:text-indigo-600 transition-colors">Browse Projects</Link>
+            <a href="mailto:nivethav012@gmail.com" className="hover:text-indigo-600 transition-colors">Email Me</a>
           </div>
         </div>
 
