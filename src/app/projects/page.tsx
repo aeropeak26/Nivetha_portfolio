@@ -1,17 +1,32 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { projectsData, Project } from "@/data/projectsData";
-import { profileData } from "@/data/profileData";
+import { projectsData as fallbackProjects, Project } from "@/data/projectsData";
 import PortaviaNavbar from "@/components/PortaviaNavbar";
 import Footer from "@/components/Footer";
 import { ArrowUpRight, Search, ExternalLink, Filter, Sparkles } from "lucide-react";
 
 export default function ProjectsListPage() {
+  const [projects, setProjects] = useState<Project[]>(fallbackProjects);
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [searchQuery, setSearchQuery] = useState("");
+
+  useEffect(() => {
+    async function loadProjects() {
+      try {
+        const res = await fetch("/api/projects");
+        const json = await res.json();
+        if (json.success && json.data && json.data.length > 0) {
+          setProjects(json.data);
+        }
+      } catch (e) {
+        console.error("Failed to load projects from DB", e);
+      }
+    }
+    loadProjects();
+  }, []);
 
   const categories = [
     "All",
@@ -22,15 +37,15 @@ export default function ProjectsListPage() {
     "Front-End Development",
   ];
 
-  const filteredProjects = projectsData.filter((project) => {
+  const filteredProjects = projects.filter((project) => {
     const matchesCategory =
       selectedCategory === "All" || project.category === selectedCategory;
     const matchesSearch =
       project.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
       project.summary.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      project.tools.some((t) =>
+      (project.tools && project.tools.some((t) =>
         t.toLowerCase().includes(searchQuery.toLowerCase())
-      );
+      ));
     return matchesCategory && matchesSearch;
   });
 
@@ -122,7 +137,7 @@ export default function ProjectsListPage() {
                 {/* Image Container */}
                 <div className="relative aspect-[16/10] w-full overflow-hidden bg-gray-900">
                   <Image
-                    src={project.image}
+                    src={project.image || "/images/realestate_preview.png"}
                     alt={project.title}
                     fill
                     className="object-cover group-hover:scale-105 transition-transform duration-500"
@@ -137,7 +152,7 @@ export default function ProjectsListPage() {
                   </div>
 
                   {/* Figma Link Badge */}
-                  {project.figmaUrl !== "#" && (
+                  {project.figmaUrl && project.figmaUrl !== "#" && (
                     <a
                       href={project.figmaUrl}
                       target="_blank"
@@ -163,7 +178,7 @@ export default function ProjectsListPage() {
 
                     {/* Tools Tags */}
                     <div className="mt-4 flex flex-wrap gap-1.5">
-                      {project.tools.map((tool) => (
+                      {project.tools && project.tools.map((tool) => (
                         <span
                           key={tool}
                           className="px-2.5 py-0.5 rounded-md bg-gray-100 text-gray-700 text-[10px] font-semibold"
