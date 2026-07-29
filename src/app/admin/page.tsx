@@ -171,6 +171,27 @@ export default function AdminPage() {
     setIsProjectModalOpen(true);
   };
 
+  const openEditProjectModal = (project: Project) => {
+    setEditingProject(project);
+    setBase64ImagePreview(project.image || "");
+    setIsProjectModalOpen(true);
+  };
+
+  const handleDeleteProject = async (id: string) => {
+    if (!confirm("Are you sure you want to delete this project?")) return;
+    setStatusMsg(null);
+    try {
+      const res = await fetch(`/api/projects/${id}`, { method: "DELETE" });
+      const data = await res.json();
+      if (data.success) {
+        setStatusMsg({ type: "success", msg: "Project deleted from Database" });
+        fetchData();
+      }
+    } catch {
+      setStatusMsg({ type: "error", msg: "Failed to delete project" });
+    }
+  };
+
   // Convert uploaded image file to Base64 Data URL string
   const handleImageFileUpload = (e: React.ChangeEvent<HTMLInputElement>, callback: (base64: string) => void) => {
     const file = e.target.files?.[0];
