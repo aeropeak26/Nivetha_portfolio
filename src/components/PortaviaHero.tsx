@@ -1,135 +1,160 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { motion } from "framer-motion";
+import { profileData } from "@/data/profileData";
+import { ArrowRight, Sparkles, FolderKanban, Download } from "lucide-react";
 
 export default function PortaviaHero() {
   return (
     <section id="hero" className="min-h-screen pt-28 pb-16 px-4 sm:px-8 flex flex-col justify-center items-center relative overflow-hidden bg-white text-[#0F1115]">
       
-      {/* Floating Design Tool Icons / Badges in Empty Spaces */}
+      {/* Background Decorative Blur Blobs */}
+      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-gradient-to-tr from-indigo-100/60 via-purple-100/40 to-pink-100/30 blur-3xl pointer-events-none rounded-full" />
+
+      {/* Floating Tool Badges */}
       
-      {/* 1. Figma Floating Badge (Top Left) */}
+      {/* 1. Figma Expert Badge (Top Left) */}
       <motion.div
-        animate={{ y: [0, -12, 0], rotate: [-2, 2, -2] }}
+        animate={{ y: [0, -10, 0], rotate: [-2, 2, -2] }}
         transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
-        className="absolute top-28 left-4 sm:left-10 lg:left-14 z-20 hidden sm:flex items-center gap-2 px-4 py-2 rounded-2xl bg-white/90 backdrop-blur-md border border-gray-200 shadow-xl text-xs font-bold text-gray-800"
+        className="absolute top-32 left-6 sm:left-12 lg:left-20 z-20 hidden sm:flex items-center gap-2.5 px-4 py-2 rounded-2xl bg-white/90 backdrop-blur-md border border-gray-200 shadow-xl text-xs font-bold text-gray-800"
       >
-        <div className="w-6 h-6 rounded-lg bg-indigo-500/10 text-indigo-600 flex items-center justify-center font-black">
+        <div className="w-7 h-7 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center font-black">
           ❖
         </div>
-        <span>Figma Expert</span>
+        <span>Figma Specialist</span>
       </motion.div>
 
-      {/* 2. Adobe Tools Floating Badge (Mid Left) */}
+      {/* 2. UI/UX Certified Badge (Mid Left) */}
       <motion.div
         animate={{ y: [0, 10, 0], rotate: [2, -2, 2] }}
         transition={{ duration: 6, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-        className="absolute bottom-28 left-4 sm:left-10 lg:left-14 z-20 hidden md:flex items-center gap-2 px-4 py-2 rounded-2xl bg-white/90 backdrop-blur-md border border-gray-200 shadow-xl text-xs font-bold text-gray-800"
+        className="absolute bottom-32 left-6 sm:left-12 lg:left-20 z-20 hidden md:flex items-center gap-2.5 px-4 py-2 rounded-2xl bg-white/90 backdrop-blur-md border border-gray-200 shadow-xl text-xs font-bold text-gray-800"
       >
-        <div className="w-6 h-6 rounded-lg bg-red-500/10 text-red-600 flex items-center justify-center font-black">
-          Ai
+        <div className="w-7 h-7 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center font-black">
+          ✓
         </div>
-        <span>Adobe Creative Suite</span>
+        <span>UI/UX Certified (Grade A)</span>
       </motion.div>
 
-      {/* 3. Framer Floating Badge (Top Right) */}
+      {/* 3. Front-End Dev Badge (Top Right) */}
       <motion.div
         animate={{ y: [0, -10, 0], rotate: [2, -2, 2] }}
         transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
-        className="absolute top-28 right-4 sm:right-10 lg:right-14 z-20 hidden sm:flex items-center gap-2 px-4 py-2 rounded-2xl bg-white/90 backdrop-blur-md border border-gray-200 shadow-xl text-xs font-bold text-gray-800"
+        className="absolute top-32 right-6 sm:right-12 lg:right-20 z-20 hidden sm:flex items-center gap-2.5 px-4 py-2 rounded-2xl bg-white/90 backdrop-blur-md border border-gray-200 shadow-xl text-xs font-bold text-gray-800"
       >
-        <div className="w-6 h-6 rounded-lg bg-black text-white flex items-center justify-center font-black text-xs">
-          ⚡
+        <div className="w-7 h-7 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center font-black text-xs">
+          {"</>"}
         </div>
-        <span>Framer Developer</span>
+        <span>Front-End Dev</span>
       </motion.div>
 
-      {/* 4. Dribbble Floating Badge (Mid Right) */}
+      {/* 4. Adobe Tools Badge (Mid Right) */}
       <motion.div
         animate={{ y: [0, 12, 0], rotate: [-2, 2, -2] }}
         transition={{ duration: 5.5, repeat: Infinity, ease: "easeInOut", delay: 1.5 }}
-        className="absolute bottom-28 right-4 sm:right-10 lg:right-14 z-20 hidden md:flex items-center gap-2 px-4 py-2 rounded-2xl bg-white/90 backdrop-blur-md border border-gray-200 shadow-xl text-xs font-bold text-gray-800"
+        className="absolute bottom-32 right-6 sm:right-12 lg:right-20 z-20 hidden md:flex items-center gap-2.5 px-4 py-2 rounded-2xl bg-white/90 backdrop-blur-md border border-gray-200 shadow-xl text-xs font-bold text-gray-800"
       >
-        <div className="w-6 h-6 rounded-full bg-pink-500/10 text-pink-600 flex items-center justify-center font-black text-xs">
-          🏀
+        <div className="w-7 h-7 rounded-xl bg-red-50 text-red-600 flex items-center justify-center font-black text-xs">
+          Ai
         </div>
-        <span>Dribbble Pro</span>
-      </motion.div>
-
-      {/* 5. Canva Floating Badge (Bottom Center Left) */}
-      <motion.div
-        animate={{ y: [0, -8, 0] }}
-        transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: 2 }}
-        className="absolute bottom-12 left-1/4 z-20 hidden lg:flex items-center gap-2 px-4 py-2 rounded-2xl bg-white/90 backdrop-blur-md border border-gray-200 shadow-lg text-xs font-bold text-gray-700"
-      >
-        <div className="w-5 h-5 rounded-md bg-cyan-500/10 text-cyan-600 flex items-center justify-center font-bold">
-          🎨
-        </div>
-        <span>Canva Assets</span>
+        <span>Adobe Illustrator & PS</span>
       </motion.div>
 
 
       {/* Hero Container */}
       <div className="w-full max-w-[1440px] mx-auto flex flex-col items-center my-auto relative z-10 px-2 sm:px-6">
         
-        {/* Top Name Subtitle */}
-        <motion.span
+        {/* Subtitle Badge */}
+        <motion.div
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
-          className="text-xs sm:text-sm md:text-base font-bold uppercase tracking-[0.3em] text-gray-500 mb-6 font-sans text-center"
+          className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-indigo-50 border border-indigo-100 text-indigo-700 text-xs font-bold uppercase tracking-widest mb-6"
         >
-          DUNCAN ROBERT
-        </motion.span>
+          <Sparkles className="w-3.5 h-3.5" />
+          <span>NIVETHA VELUSAMY — PORTFOLIO</span>
+        </motion.div>
 
-        {/* Main Display Title Grid: DIGITAL [ Portrait Card ] DESIGNER */}
+        {/* Display Title Grid: UI / UX [ Profile Card ] DEVELOPER */}
         <div className="w-full flex flex-col lg:flex-row items-center justify-center gap-4 lg:gap-8">
           
-          {/* Left Headline: DIGITAL (Large prominent font) */}
+          {/* Left Title: UI / UX */}
           <motion.div
             initial={{ opacity: 0, x: -30 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.7 }}
             className="text-center lg:text-right"
           >
-            <h1 className="text-6xl sm:text-8xl md:text-[5.5rem] lg:text-[6.5rem] xl:text-[8.5rem] font-bold tracking-tighter text-[#0F1115] uppercase leading-none font-display">
-              DIGITAL
+            <h1 className="text-5xl sm:text-7xl md:text-[5rem] lg:text-[6rem] xl:text-[7.5rem] font-black tracking-tighter text-[#0F1115] uppercase leading-none font-display">
+              UI / UX
             </h1>
           </motion.div>
 
-          {/* Center Portrait Image Card (Larger Size as requested!) */}
+          {/* Center Profile Image Card */}
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.7, delay: 0.2 }}
-            className="relative w-64 sm:w-80 md:w-96 lg:w-[380px] xl:w-[420px] aspect-[3/4] rounded-[40px] overflow-hidden shadow-2xl border border-gray-200 shrink-0 my-4 lg:my-0 group bg-[#F8F9FA]"
+            className="relative w-64 sm:w-80 md:w-96 lg:w-[360px] xl:w-[400px] aspect-[3/4] rounded-[40px] overflow-hidden shadow-2xl border-4 border-white ring-1 ring-gray-200/80 shrink-0 my-4 lg:my-0 group bg-gray-100"
           >
             <Image
-              src="/images/duncan_portrait.png"
-              alt="Duncan Robert - Digital Designer"
+              src={profileData.avatar}
+              alt={profileData.name}
               fill
               priority
               className="object-cover group-hover:scale-105 transition-transform duration-700"
             />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
+              <span className="text-white text-xs font-bold tracking-wide">
+                Nivetha Velusamy — UI/UX Designer
+              </span>
+            </div>
           </motion.div>
 
-          {/* Right Headline & Subtitle: DESIGNER */}
+          {/* Right Title: DESIGNER */}
           <motion.div
             initial={{ opacity: 0, x: 30 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.7, delay: 0.1 }}
             className="text-center lg:text-left flex flex-col items-center lg:items-start"
           >
-            <h1 className="text-6xl sm:text-8xl md:text-[5.5rem] lg:text-[6.5rem] xl:text-[8.5rem] font-bold tracking-tighter text-[#0F1115] uppercase leading-none font-display">
+            <h1 className="text-5xl sm:text-7xl md:text-[5rem] lg:text-[6rem] xl:text-[7.5rem] font-black tracking-tighter text-[#0F1115] uppercase leading-none font-display">
               DESIGNER
             </h1>
-            <p className="mt-4 text-xs sm:text-sm md:text-base text-gray-500 font-medium max-w-xs leading-relaxed text-center lg:text-left">
-              I'm a US-based digital designer and Framer developer
+            <p className="mt-4 text-xs sm:text-sm md:text-base text-gray-600 font-medium max-w-xs leading-relaxed text-center lg:text-left">
+              Crafting intuitive, user-centered digital solutions with clean visuals and front-end code.
             </p>
           </motion.div>
 
         </div>
+
+        {/* Action Buttons */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.4 }}
+          className="mt-10 flex flex-wrap items-center justify-center gap-4"
+        >
+          <Link
+            href="/projects"
+            className="inline-flex items-center gap-2 px-7 py-3.5 rounded-full bg-[#0F1115] text-white text-xs font-bold uppercase tracking-wider hover:bg-indigo-600 transition-all shadow-xl hover:shadow-indigo-500/20 active:scale-95"
+          >
+            <FolderKanban className="w-4 h-4" />
+            <span>Explore All Projects</span>
+            <ArrowRight className="w-4 h-4" />
+          </Link>
+
+          <a
+            href="#contact"
+            className="inline-flex items-center gap-2 px-7 py-3.5 rounded-full bg-white border border-gray-300 text-gray-800 text-xs font-bold uppercase tracking-wider hover:bg-gray-50 transition-all shadow-sm active:scale-95"
+          >
+            <span>Get In Touch</span>
+          </a>
+        </motion.div>
+
       </div>
 
     </section>
