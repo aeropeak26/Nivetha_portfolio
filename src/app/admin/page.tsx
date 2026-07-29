@@ -144,6 +144,33 @@ export default function AdminPage() {
     }
   };
 
+  const openNewProjectModal = () => {
+    setEditingProject({
+      id: `project-${Date.now()}`,
+      title: "",
+      subtitle: "",
+      category: "UI/UX Design",
+      tag: "Featured Project",
+      image: "/images/realestate_preview.png",
+      figmaUrl: "https://www.figma.com/",
+      role: "UI/UX Designer",
+      timeline: "3 Weeks",
+      tools: ["Figma", "Photoshop"],
+      summary: "",
+      problemStatement: "",
+      solution: "",
+      researchHighlights: [],
+      keyFeatures: [],
+      colorPalette: [
+        { name: "Primary Dark", hex: "#0F1115" },
+        { name: "Accent Blue", hex: "#6366F1" },
+      ],
+      figmaEmbedUrl: "",
+      interactivePreviewType: "figma",
+    });
+    setIsProjectModalOpen(true);
+  };
+
   // Convert uploaded image file to Base64 Data URL string
   const handleImageFileUpload = (e: React.ChangeEvent<HTMLInputElement>, callback: (base64: string) => void) => {
     const file = e.target.files?.[0];
