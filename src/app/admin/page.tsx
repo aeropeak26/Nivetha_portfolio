@@ -16,15 +16,10 @@ import {
   Edit2,
   Trash2,
   Upload,
-  Database,
   CheckCircle2,
   AlertCircle,
   FolderKanban,
   UserCheck,
-  Code,
-  Copy,
-  Check,
-  Sparkles,
   Eye,
   Share2,
   Briefcase,
@@ -33,7 +28,7 @@ import {
   HelpCircle,
   BookOpen,
   Star,
-  Mail,
+  Sparkles,
 } from "lucide-react";
 
 export default function AdminPage() {
@@ -42,7 +37,7 @@ export default function AdminPage() {
   const [loginError, setLoginError] = useState("");
 
   const [activeTab, setActiveTab] = useState<
-    "projects" | "hero" | "about" | "socials" | "services" | "testimonials" | "faqs" | "blogs" | "inbox" | "supabase"
+    "projects" | "hero" | "about" | "socials" | "services" | "testimonials" | "faqs" | "blogs" | "inbox"
   >("projects");
 
   const [projects, setProjects] = useState<Project[]>([]);
@@ -59,17 +54,12 @@ export default function AdminPage() {
   // Edit Project Modal state
   const [editingProject, setEditingProject] = useState<Partial<Project> | null>(null);
   const [isProjectModalOpen, setIsProjectModalOpen] = useState(false);
-  const [base64ImagePreview, setBase64ImagePreview] = useState<string>("");
 
-  // Edit Service / Testimonial / FAQ / Blog state
+  // Edit Service, Testimonial, FAQ, Blog state
   const [editingService, setEditingService] = useState<Partial<ServiceItem> | null>(null);
   const [editingTestimonial, setEditingTestimonial] = useState<Partial<TestimonialItem> | null>(null);
   const [editingFaq, setEditingFaq] = useState<Partial<FaqItem> | null>(null);
   const [editingBlog, setEditingBlog] = useState<Partial<BlogItem> | null>(null);
-
-  // SQL Schema Modal/Copy state
-  const [sqlSchema, setSqlSchema] = useState<string>("");
-  const [copiedSql, setCopiedSql] = useState(false);
 
   useEffect(() => {
     const savedAuth = localStorage.getItem("nivi_admin_auth");
@@ -109,7 +99,7 @@ export default function AdminPage() {
   const fetchData = async () => {
     setLoading(true);
     try {
-      const [projRes, profRes, svcRes, testRes, faqRes, blogRes, msgRes, seedRes] = await Promise.all([
+      const [projRes, profRes, svcRes, testRes, faqRes, blogRes, msgRes] = await Promise.all([
         fetch("/api/projects"),
         fetch("/api/profile"),
         fetch("/api/services"),
@@ -117,7 +107,6 @@ export default function AdminPage() {
         fetch("/api/faqs"),
         fetch("/api/blogs"),
         fetch("/api/contact"),
-        fetch("/api/seed"),
       ]);
 
       const projData = await projRes.json();
@@ -127,7 +116,6 @@ export default function AdminPage() {
       const faqData = await faqRes.json();
       const blogData = await blogRes.json();
       const msgData = await msgRes.json();
-      const seedData = await seedRes.json();
 
       if (projData.success) setProjects(projData.data);
       if (profData.success) setProfile(profData.data);
@@ -136,7 +124,6 @@ export default function AdminPage() {
       if (faqData.success) setFaqs(faqData.data);
       if (blogData.success) setBlogs(blogData.data);
       if (msgData.success) setMessages(msgData.data);
-      if (seedData.sqlSchema) setSqlSchema(seedData.sqlSchema);
     } catch (err) {
       console.error("Fetch data error:", err);
     } finally {
@@ -144,26 +131,46 @@ export default function AdminPage() {
     }
   };
 
+  // Base64 file uploader converter
+  const handleImageFileUpload = (e: React.ChangeEvent<HTMLInputElement>, callback: (base64: string) => void) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        const result = reader.result as string;
+        callback(result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  // Helper functions for Projects
   const openNewProjectModal = () => {
     setEditingProject({
       id: `project-${Date.now()}`,
       title: "",
       subtitle: "",
-      category: "UI/UX Design",
+      category: "UI/UX & Web Design",
       tag: "Featured Project",
       image: "/images/realestate_preview.png",
       figmaUrl: "https://www.figma.com/",
       role: "UI/UX Designer",
       timeline: "3 Weeks",
-      tools: ["Figma", "Photoshop"],
+      tools: ["Figma", "Adobe Photoshop"],
       summary: "",
       problemStatement: "",
       solution: "",
-      researchHighlights: [],
-      keyFeatures: [],
+      researchHighlights: [
+        "Conducted user interviews to identify key decision factors.",
+        "Created distinct buyer personas and user journey flows."
+      ],
+      keyFeatures: [
+        { title: "Smart Discovery", description: "Intuitive filtering and visual cards." },
+        { title: "Interactive Viewer", description: "High-resolution prototype preview." }
+      ],
       colorPalette: [
         { name: "Primary Dark", hex: "#0F1115" },
-        { name: "Accent Blue", hex: "#6366F1" },
+        { name: "Accent Indigo", hex: "#6366F1" }
       ],
       figmaEmbedUrl: "",
       interactivePreviewType: "figma",
@@ -172,8 +179,7 @@ export default function AdminPage() {
   };
 
   const openEditProjectModal = (project: Project) => {
-    setEditingProject(project);
-    setBase64ImagePreview(project.image || "");
+    setEditingProject({ ...project });
     setIsProjectModalOpen(true);
   };
 
@@ -192,20 +198,6 @@ export default function AdminPage() {
     }
   };
 
-  // Convert uploaded image file to Base64 Data URL string
-  const handleImageFileUpload = (e: React.ChangeEvent<HTMLInputElement>, callback: (base64: string) => void) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        const result = reader.result as string;
-        callback(result);
-      };
-      reader.readAsDataURL(file);
-    }
-  };
-
-  // Save Handlers for each section
   const handleSaveProject = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!editingProject?.title) return;
@@ -229,6 +221,7 @@ export default function AdminPage() {
     }
   };
 
+  // Save Profile Handler
   const handleSaveProfile = async (e: React.FormEvent) => {
     e.preventDefault();
     setStatusMsg(null);
@@ -249,6 +242,7 @@ export default function AdminPage() {
     }
   };
 
+  // Save Service Handler
   const handleSaveService = async (serviceItem: Partial<ServiceItem>) => {
     setStatusMsg(null);
     try {
@@ -268,6 +262,7 @@ export default function AdminPage() {
     }
   };
 
+  // Save Testimonial Handler
   const handleSaveTestimonial = async (testItem: Partial<TestimonialItem>) => {
     setStatusMsg(null);
     try {
@@ -287,6 +282,7 @@ export default function AdminPage() {
     }
   };
 
+  // Save FAQ Handler
   const handleSaveFaq = async (faqItem: Partial<FaqItem>) => {
     setStatusMsg(null);
     try {
@@ -306,6 +302,7 @@ export default function AdminPage() {
     }
   };
 
+  // Save Blog Handler
   const handleSaveBlog = async (blogItem: Partial<BlogItem>) => {
     setStatusMsg(null);
     try {
@@ -325,29 +322,8 @@ export default function AdminPage() {
     }
   };
 
-  const handleSeedDatabase = async () => {
-    setStatusMsg(null);
-    setLoading(true);
-    try {
-      const res = await fetch("/api/seed", { method: "POST" });
-      const data = await res.json();
-      if (data.success) {
-        setStatusMsg({ type: "success", msg: data.message });
-        fetchData();
-      } else {
-        setStatusMsg({
-          type: "error",
-          msg: data.error || "Please run the SQL DDL script in Supabase SQL Editor to create tables.",
-        });
-      }
-    } catch {
-      setStatusMsg({ type: "error", msg: "Error executing DB sync" });
-    } finally {
-      setLoading(false);
-    }
-  };
 
-  // Password Login Screen
+  // Login Screen
   if (!isAuthenticated) {
     return (
       <div className="min-h-screen bg-[#F8F9FA] text-[#0F1115] flex items-center justify-center p-4 selection:bg-indigo-600 selection:text-white">
@@ -405,7 +381,7 @@ export default function AdminPage() {
   }
 
 
-  // Authenticated Admin Dashboard UI (Full Light Theme)
+  // Authenticated Dashboard
   return (
     <div className="min-h-screen bg-[#F8F9FA] text-[#0F1115] selection:bg-indigo-600 selection:text-white flex flex-col">
       
@@ -475,7 +451,7 @@ export default function AdminPage() {
           </div>
         )}
 
-        {/* Section Tabs Navigation (Light Theme) */}
+        {/* Section Tabs Navigation */}
         <div className="flex flex-wrap items-center justify-between gap-3 mb-8 pb-4 border-b border-gray-200">
           <div className="flex flex-wrap gap-2">
             {[
@@ -517,6 +493,26 @@ export default function AdminPage() {
               <span>Add New Project</span>
             </button>
           )}
+
+          {activeTab === "testimonials" && (
+            <button
+              onClick={() => setEditingTestimonial({ id: `test-${Date.now()}`, name: "", role: "", quote: "", avatar: "/images/Profile.png", rating: 5 })}
+              className="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-indigo-600 hover:bg-indigo-700 text-white font-extrabold text-xs uppercase tracking-wider transition-all shadow-md active:scale-95"
+            >
+              <Plus className="w-4 h-4" />
+              <span>Add Testimonial</span>
+            </button>
+          )}
+
+          {activeTab === "blogs" && (
+            <button
+              onClick={() => setEditingBlog({ id: `blog-${Date.now()}`, title: "", category: "Insights", date: "May 2025", description: "", image: "/images/agency_workspace.png" })}
+              className="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-indigo-600 hover:bg-indigo-700 text-white font-extrabold text-xs uppercase tracking-wider transition-all shadow-md active:scale-95"
+            >
+              <Plus className="w-4 h-4" />
+              <span>Add Blog Article</span>
+            </button>
+          )}
         </div>
 
 
@@ -546,7 +542,10 @@ export default function AdminPage() {
                       <h3 className="text-base font-extrabold text-[#0F1115] line-clamp-1">
                         {project.title}
                       </h3>
-                      <p className="text-xs text-gray-600 mt-1.5 line-clamp-2 leading-relaxed font-medium">
+                      <p className="text-xs text-gray-500 font-medium mt-0.5 line-clamp-1">
+                        {project.subtitle}
+                      </p>
+                      <p className="text-xs text-gray-600 mt-2 line-clamp-2 leading-relaxed font-medium">
                         {project.summary}
                       </p>
                     </div>
@@ -558,7 +557,7 @@ export default function AdminPage() {
                       target="_blank"
                       className="text-xs text-indigo-600 hover:underline font-extrabold"
                     >
-                      Preview Page ↗
+                      Preview Case Study ↗
                     </Link>
 
                     <div className="flex gap-2">
@@ -791,6 +790,102 @@ export default function AdminPage() {
         )}
 
 
+        {/* TAB 6: TESTIMONIALS MANAGER */}
+        {activeTab === "testimonials" && (
+          <div className="bg-white border border-gray-200 rounded-3xl p-6 sm:p-8 space-y-6 shadow-sm">
+            <div className="flex items-center justify-between pb-4 border-b border-gray-200">
+              <div>
+                <h2 className="text-lg font-black text-[#0F1115]">Client Testimonials ({testimonials.length})</h2>
+                <p className="text-xs text-gray-500">Manage client reviews and feedback.</p>
+              </div>
+              <button
+                onClick={() => setEditingTestimonial({ id: `test-${Date.now()}`, name: "", role: "", quote: "", avatar: "/images/Profile.png", rating: 5 })}
+                className="px-4 py-2 rounded-full bg-indigo-600 text-white font-extrabold text-xs uppercase"
+              >
+                + Add Testimonial
+              </button>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {testimonials.map((item) => (
+                <div key={item.id} className="p-5 rounded-2xl bg-gray-50 border border-gray-200 space-y-3 text-xs flex flex-col justify-between">
+                  <div>
+                    <div className="flex justify-between items-start">
+                      <div className="flex items-center gap-3">
+                        <div className="relative w-10 h-10 rounded-full overflow-hidden border border-gray-200">
+                          <Image src={item.avatar || "/images/Profile.png"} alt={item.name} fill className="object-cover" />
+                        </div>
+                        <div>
+                          <h4 className="font-extrabold text-sm text-[#0F1115]">{item.name}</h4>
+                          <p className="text-[11px] text-gray-500">{item.role}</p>
+                        </div>
+                      </div>
+                      <span className="text-amber-400 font-bold">{"★".repeat(item.rating || 5)}</span>
+                    </div>
+                    <p className="mt-3 text-gray-700 italic">"{item.quote}"</p>
+                  </div>
+
+                  <div className="flex justify-end gap-2 pt-2 border-t border-gray-200">
+                    <button
+                      onClick={() => setEditingTestimonial(item)}
+                      className="px-3 py-1 rounded-lg bg-white border border-gray-200 font-bold text-indigo-600 hover:bg-gray-100"
+                    >
+                      Edit
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+
+        {/* TAB 8: BLOGS MANAGER */}
+        {activeTab === "blogs" && (
+          <div className="bg-white border border-gray-200 rounded-3xl p-6 sm:p-8 space-y-6 shadow-sm">
+            <div className="flex items-center justify-between pb-4 border-b border-gray-200">
+              <div>
+                <h2 className="text-lg font-black text-[#0F1115]">Design Insights & Articles ({blogs.length})</h2>
+                <p className="text-xs text-gray-500">Manage published blog posts and tutorials.</p>
+              </div>
+              <button
+                onClick={() => setEditingBlog({ id: `blog-${Date.now()}`, title: "", category: "Insights", date: "May 2025", description: "", image: "/images/agency_workspace.png" })}
+                className="px-4 py-2 rounded-full bg-indigo-600 text-white font-extrabold text-xs uppercase"
+              >
+                + Add Article
+              </button>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {blogs.map((item) => (
+                <div key={item.id} className="p-4 rounded-2xl bg-gray-50 border border-gray-200 space-y-3 text-xs flex flex-col justify-between">
+                  <div>
+                    <div className="relative aspect-[16/9] w-full rounded-xl overflow-hidden bg-gray-100 mb-3">
+                      <Image src={item.image || "/images/agency_workspace.png"} alt={item.title} fill className="object-cover" />
+                      <span className="absolute top-2 left-2 px-2.5 py-0.5 rounded-full bg-white/90 text-[10px] font-bold text-black">
+                        {item.category}
+                      </span>
+                    </div>
+                    <h4 className="font-extrabold text-sm text-[#0F1115]">{item.title}</h4>
+                    <p className="text-[11px] text-gray-400 mt-0.5">{item.date}</p>
+                    <p className="text-gray-600 mt-2 line-clamp-2">{item.description}</p>
+                  </div>
+
+                  <div className="flex justify-end gap-2 pt-2 border-t border-gray-200">
+                    <button
+                      onClick={() => setEditingBlog(item)}
+                      className="px-3 py-1 rounded-lg bg-white border border-gray-200 font-bold text-indigo-600 hover:bg-gray-100"
+                    >
+                      Edit Article
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+
         {/* TAB 9: INQUIRIES INBOX */}
         {activeTab === "inbox" && (
           <div className="bg-white border border-gray-200 rounded-3xl p-6 sm:p-8 space-y-6 shadow-sm">
@@ -821,6 +916,114 @@ export default function AdminPage() {
         )}
 
       </div>
+
+      {/* EDIT TESTIMONIAL MODAL */}
+      {editingTestimonial && (
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-white border border-gray-200 rounded-3xl max-w-lg w-full p-6 space-y-4 shadow-2xl">
+            <h3 className="font-extrabold text-base">Edit Testimonial</h3>
+            <div className="grid grid-cols-2 gap-3 text-xs">
+              <div>
+                <label className="block font-bold mb-1">Client Name</label>
+                <input
+                  type="text"
+                  value={editingTestimonial.name || ""}
+                  onChange={(e) => setEditingTestimonial({ ...editingTestimonial, name: e.target.value })}
+                  className="w-full p-2 rounded-xl border border-gray-200"
+                />
+              </div>
+              <div>
+                <label className="block font-bold mb-1">Role / Title</label>
+                <input
+                  type="text"
+                  value={editingTestimonial.role || ""}
+                  onChange={(e) => setEditingTestimonial({ ...editingTestimonial, role: e.target.value })}
+                  className="w-full p-2 rounded-xl border border-gray-200"
+                />
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-xs font-bold mb-1">Client Quote / Review</label>
+              <textarea
+                rows={3}
+                value={editingTestimonial.quote || ""}
+                onChange={(e) => setEditingTestimonial({ ...editingTestimonial, quote: e.target.value })}
+                className="w-full p-2 rounded-xl border border-gray-200 text-xs"
+              />
+            </div>
+
+            <div>
+              <label className="block text-xs font-bold mb-1">Upload Client Avatar Image (Base64)</label>
+              <input
+                type="file"
+                accept="image/*"
+                onChange={(e) => handleImageFileUpload(e, (base64) => setEditingTestimonial({ ...editingTestimonial, avatar: base64 }))}
+                className="text-xs text-gray-600 file:py-1 file:px-3 file:rounded-full file:border-0 file:bg-indigo-600 file:text-white"
+              />
+            </div>
+
+            <div className="flex justify-end gap-2 pt-2">
+              <button onClick={() => setEditingTestimonial(null)} className="px-4 py-2 rounded-full bg-gray-100 text-xs font-bold">Cancel</button>
+              <button onClick={() => handleSaveTestimonial(editingTestimonial)} className="px-4 py-2 rounded-full bg-indigo-600 text-white text-xs font-bold">Save Testimonial</button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* EDIT BLOG MODAL */}
+      {editingBlog && (
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-white border border-gray-200 rounded-3xl max-w-lg w-full p-6 space-y-4 shadow-2xl">
+            <h3 className="font-extrabold text-base">Edit Blog Article</h3>
+            <div className="grid grid-cols-2 gap-3 text-xs">
+              <div>
+                <label className="block font-bold mb-1">Article Title</label>
+                <input
+                  type="text"
+                  value={editingBlog.title || ""}
+                  onChange={(e) => setEditingBlog({ ...editingBlog, title: e.target.value })}
+                  className="w-full p-2 rounded-xl border border-gray-200"
+                />
+              </div>
+              <div>
+                <label className="block font-bold mb-1">Category</label>
+                <input
+                  type="text"
+                  value={editingBlog.category || ""}
+                  onChange={(e) => setEditingBlog({ ...editingBlog, category: e.target.value })}
+                  className="w-full p-2 rounded-xl border border-gray-200"
+                />
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-xs font-bold mb-1">Summary / Description</label>
+              <textarea
+                rows={3}
+                value={editingBlog.description || ""}
+                onChange={(e) => setEditingBlog({ ...editingBlog, description: e.target.value })}
+                className="w-full p-2 rounded-xl border border-gray-200 text-xs"
+              />
+            </div>
+
+            <div>
+              <label className="block text-xs font-bold mb-1">Upload Article Thumbnail (Base64)</label>
+              <input
+                type="file"
+                accept="image/*"
+                onChange={(e) => handleImageFileUpload(e, (base64) => setEditingBlog({ ...editingBlog, image: base64 }))}
+                className="text-xs text-gray-600 file:py-1 file:px-3 file:rounded-full file:border-0 file:bg-indigo-600 file:text-white"
+              />
+            </div>
+
+            <div className="flex justify-end gap-2 pt-2">
+              <button onClick={() => setEditingBlog(null)} className="px-4 py-2 rounded-full bg-gray-100 text-xs font-bold">Cancel</button>
+              <button onClick={() => handleSaveBlog(editingBlog)} className="px-4 py-2 rounded-full bg-indigo-600 text-white text-xs font-bold">Save Article</button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* EDIT SERVICE MODAL */}
       {editingService && (
@@ -853,74 +1056,213 @@ export default function AdminPage() {
         </div>
       )}
 
-      {/* EDIT / ADD PROJECT MODAL */}
+      {/* FULL PROJECT CASE STUDY EDIT MODAL */}
       {isProjectModalOpen && editingProject && (
         <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
-          <div className="bg-white border border-gray-200 rounded-3xl max-w-3xl w-full max-h-[90vh] overflow-y-auto p-6 sm:p-8 my-8 shadow-2xl">
-            <div className="flex items-center justify-between pb-4 mb-6 border-b border-gray-200">
-              <h2 className="text-lg font-black text-[#0F1115]">
-                {editingProject.id?.startsWith("project-") ? "Add New Project" : "Edit Project"}
-              </h2>
+          <div className="bg-white border border-gray-200 rounded-3xl max-w-4xl w-full max-h-[90vh] overflow-y-auto p-6 sm:p-8 my-8 shadow-2xl text-xs space-y-6">
+            <div className="flex items-center justify-between pb-4 border-b border-gray-200">
+              <div>
+                <h2 className="text-xl font-black text-[#0F1115]">
+                  {editingProject.id?.startsWith("project-") ? "Add New Case Study Project" : `Edit Case Study: ${editingProject.title}`}
+                </h2>
+                <p className="text-xs text-gray-500 font-medium mt-0.5">
+                  Update problem statements, solutions, research insights, features, color swatches, and embeds.
+                </p>
+              </div>
               <button
                 onClick={() => setIsProjectModalOpen(false)}
-                className="text-gray-400 hover:text-black text-lg font-bold"
+                className="text-gray-400 hover:text-black text-xl font-bold"
               >
                 ✕
               </button>
             </div>
 
-            <form onSubmit={handleSaveProject} className="space-y-4 text-xs">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <form onSubmit={handleSaveProject} className="space-y-6">
+              
+              {/* Basic Meta Info */}
+              <div className="space-y-3">
+                <h3 className="font-extrabold text-sm text-indigo-600 uppercase tracking-wider">1. Basic Info & Tagging</h3>
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                  <div>
+                    <label className="block font-bold text-gray-700 mb-1">Project Slug / ID</label>
+                    <input
+                      type="text"
+                      required
+                      value={editingProject.id || ""}
+                      onChange={(e) => setEditingProject({ ...editingProject, id: e.target.value })}
+                      className="w-full px-3 py-2 rounded-xl bg-gray-50 border border-gray-200 text-xs"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block font-bold text-gray-700 mb-1">Category</label>
+                    <input
+                      type="text"
+                      required
+                      value={editingProject.category || ""}
+                      onChange={(e) => setEditingProject({ ...editingProject, category: e.target.value })}
+                      className="w-full px-3 py-2 rounded-xl bg-gray-50 border border-gray-200 text-xs"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block font-bold text-gray-700 mb-1">Tag (Featured / Resume)</label>
+                    <select
+                      value={editingProject.tag || "Featured Project"}
+                      onChange={(e) => setEditingProject({ ...editingProject, tag: e.target.value })}
+                      className="w-full px-3 py-2 rounded-xl bg-gray-50 border border-gray-200 text-xs"
+                    >
+                      <option value="Featured Project">Featured Project</option>
+                      <option value="Resume Project">Resume Project</option>
+                      <option value="Technical Project">Technical Project</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block font-bold text-gray-700 mb-1">Project Title</label>
+                    <input
+                      type="text"
+                      required
+                      value={editingProject.title || ""}
+                      onChange={(e) => setEditingProject({ ...editingProject, title: e.target.value })}
+                      className="w-full px-3 py-2 rounded-xl bg-gray-50 border border-gray-200 text-xs"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block font-bold text-gray-700 mb-1">Subtitle Banner</label>
+                    <input
+                      type="text"
+                      value={editingProject.subtitle || ""}
+                      onChange={(e) => setEditingProject({ ...editingProject, subtitle: e.target.value })}
+                      className="w-full px-3 py-2 rounded-xl bg-gray-50 border border-gray-200 text-xs"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Role, Timeline & Figma Links */}
+              <div className="space-y-3 pt-3 border-t border-gray-200">
+                <h3 className="font-extrabold text-sm text-indigo-600 uppercase tracking-wider">2. Role, Tools & Figma Links</h3>
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                  <div>
+                    <label className="block font-bold text-gray-700 mb-1">Designer Role</label>
+                    <input
+                      type="text"
+                      value={editingProject.role || ""}
+                      onChange={(e) => setEditingProject({ ...editingProject, role: e.target.value })}
+                      className="w-full px-3 py-2 rounded-xl bg-gray-50 border border-gray-200 text-xs"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block font-bold text-gray-700 mb-1">Timeline</label>
+                    <input
+                      type="text"
+                      value={editingProject.timeline || ""}
+                      onChange={(e) => setEditingProject({ ...editingProject, timeline: e.target.value })}
+                      className="w-full px-3 py-2 rounded-xl bg-gray-50 border border-gray-200 text-xs"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block font-bold text-gray-700 mb-1">Tools (Comma separated)</label>
+                    <input
+                      type="text"
+                      value={editingProject.tools ? editingProject.tools.join(", ") : ""}
+                      onChange={(e) => setEditingProject({ ...editingProject, tools: e.target.value.split(",").map(t => t.trim()) })}
+                      className="w-full px-3 py-2 rounded-xl bg-gray-50 border border-gray-200 text-xs"
+                    />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block font-bold text-gray-700 mb-1">Figma Design File URL</label>
+                    <input
+                      type="text"
+                      value={editingProject.figmaUrl || ""}
+                      onChange={(e) => setEditingProject({ ...editingProject, figmaUrl: e.target.value })}
+                      className="w-full px-3 py-2 rounded-xl bg-gray-50 border border-gray-200 text-xs"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block font-bold text-gray-700 mb-1">Figma Canvas Embed URL</label>
+                    <input
+                      type="text"
+                      value={editingProject.figmaEmbedUrl || ""}
+                      onChange={(e) => setEditingProject({ ...editingProject, figmaEmbedUrl: e.target.value })}
+                      className="w-full px-3 py-2 rounded-xl bg-gray-50 border border-gray-200 text-xs"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Case Study Content Breakdown */}
+              <div className="space-y-3 pt-3 border-t border-gray-200">
+                <h3 className="font-extrabold text-sm text-indigo-600 uppercase tracking-wider">3. Case Study Breakdown</h3>
+                
                 <div>
-                  <label className="block font-bold text-gray-700 mb-1">Project ID / Slug</label>
-                  <input
-                    type="text"
-                    required
-                    value={editingProject.id || ""}
-                    onChange={(e) => setEditingProject({ ...editingProject, id: e.target.value })}
-                    className="w-full px-4 py-2.5 rounded-xl bg-gray-50 border border-gray-200 text-xs text-[#0F1115]"
+                  <label className="block font-bold text-gray-700 mb-1">Short Card Summary</label>
+                  <textarea
+                    rows={2}
+                    value={editingProject.summary || ""}
+                    onChange={(e) => setEditingProject({ ...editingProject, summary: e.target.value })}
+                    className="w-full px-3 py-2 rounded-xl bg-gray-50 border border-gray-200 text-xs"
                   />
                 </div>
 
                 <div>
-                  <label className="block font-bold text-gray-700 mb-1">Category</label>
-                  <input
-                    type="text"
-                    required
-                    value={editingProject.category || ""}
-                    onChange={(e) => setEditingProject({ ...editingProject, category: e.target.value })}
-                    className="w-full px-4 py-2.5 rounded-xl bg-gray-50 border border-gray-200 text-xs text-[#0F1115]"
+                  <label className="block font-bold text-red-600 mb-1">01. The Challenge (Problem Statement)</label>
+                  <textarea
+                    rows={3}
+                    value={editingProject.problemStatement || ""}
+                    onChange={(e) => setEditingProject({ ...editingProject, problemStatement: e.target.value })}
+                    className="w-full px-3 py-2 rounded-xl bg-gray-50 border border-gray-200 text-xs"
+                  />
+                </div>
+
+                <div>
+                  <label className="block font-bold text-emerald-600 mb-1">02. The Approach & Solution (Design Solution)</label>
+                  <textarea
+                    rows={3}
+                    value={editingProject.solution || ""}
+                    onChange={(e) => setEditingProject({ ...editingProject, solution: e.target.value })}
+                    className="w-full px-3 py-2 rounded-xl bg-gray-50 border border-gray-200 text-xs"
+                  />
+                </div>
+
+                <div>
+                  <label className="block font-bold text-indigo-700 mb-1">Research Insights & UX Methodology (One bullet per line)</label>
+                  <textarea
+                    rows={4}
+                    value={editingProject.researchHighlights ? editingProject.researchHighlights.join("\n") : ""}
+                    onChange={(e) => setEditingProject({ ...editingProject, researchHighlights: e.target.value.split("\n").filter(Boolean) })}
+                    className="w-full px-3 py-2 rounded-xl bg-gray-50 border border-gray-200 text-xs font-mono"
                   />
                 </div>
               </div>
 
-              <div>
-                <label className="block font-bold text-gray-700 mb-1">Project Title</label>
-                <input
-                  type="text"
-                  required
-                  value={editingProject.title || ""}
-                  onChange={(e) => setEditingProject({ ...editingProject, title: e.target.value })}
-                  className="w-full px-4 py-2.5 rounded-xl bg-gray-50 border border-gray-200 text-xs text-[#0F1115]"
-                />
-              </div>
-
-              {/* IMAGE UPLOAD & BASE64 CONVERTER */}
-              <div className="p-4 rounded-2xl bg-gray-50 border border-gray-200 space-y-3">
+              {/* Cover Image Uploader */}
+              <div className="p-4 rounded-2xl bg-gray-50 border border-gray-200 space-y-3 pt-3 border-t border-gray-200">
                 <label className="block font-bold text-indigo-700 flex items-center gap-1.5">
                   <Upload className="w-4 h-4 text-indigo-600" />
-                  <span>Upload Image (Auto-Convert Base64)</span>
+                  <span>Upload Main Cover Image (Base64 Auto-Convert)</span>
                 </label>
 
                 <input
                   type="file"
                   accept="image/*"
                   onChange={(e) => handleImageFileUpload(e, (base64) => setEditingProject({ ...editingProject, image: base64 }))}
-                  className="text-xs text-gray-600 file:mr-3 file:py-1.5 file:px-3 file:rounded-full file:border-0 file:text-xs file:font-bold file:bg-indigo-600 file:text-white hover:file:bg-indigo-700 cursor-pointer"
+                  className="text-xs text-gray-600 file:mr-3 file:py-1.5 file:px-3 file:rounded-full file:border-0 file:text-xs file:font-bold file:bg-indigo-600 file:text-white cursor-pointer"
                 />
               </div>
 
-              <div className="pt-4 flex justify-end gap-3 border-t border-gray-200">
+              {/* Save & Cancel Bar */}
+              <div className="pt-4 flex justify-end gap-3 border-t border-gray-200 sticky bottom-0 bg-white py-3">
                 <button
                   type="button"
                   onClick={() => setIsProjectModalOpen(false)}
@@ -932,9 +1274,10 @@ export default function AdminPage() {
                   type="submit"
                   className="px-6 py-2.5 rounded-full bg-indigo-600 hover:bg-indigo-700 font-bold text-white shadow-md active:scale-95"
                 >
-                  Save Project
+                  Save Full Case Study
                 </button>
               </div>
+
             </form>
           </div>
         </div>
