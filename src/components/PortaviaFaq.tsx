@@ -1,44 +1,28 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronDown } from "lucide-react";
-
-const faqs = [
-  {
-    id: 1,
-    question: "1. WHAT SERVICES DO YOU OFFER?",
-    answer: "I specialize in UI/UX Design, Web Application Development (Next.js & React), Brand Identity Design, Framer Motion Animations, and Design System Architecture.",
-  },
-  {
-    id: 2,
-    question: "2. HOW DOES THE DESIGN PROCESS WORK?",
-    answer: "Our process begins with a discovery session to align on goals, followed by wireframing, interactive UI prototypes, iteration cycles based on your feedback, and final high-performance deployment.",
-  },
-  {
-    id: 3,
-    question: "3. HOW LONG DOES A PROJECT USUALLY TAKE?",
-    answer: "Typical project timelines range from 2 to 4 weeks depending on scope, complexity, and feature requirements.",
-  },
-  {
-    id: 4,
-    question: "4. WHAT DO I NEED TO PROVIDE BEFORE STARTING A PROJECT?",
-    answer: "You'll just need your project goals, any existing brand assets or logos, and content outline. I will guide you through everything else!",
-  },
-  {
-    id: 5,
-    question: "5. DO YOU OFFER REVISIONS?",
-    answer: "Yes, all design packages include dedicated revision rounds to ensure the final product perfectly aligns with your expectations.",
-  },
-  {
-    id: 6,
-    question: "6. HOW DO I GET STARTED?",
-    answer: "Simply fill out the contact form below or email me directly at designer@example.com to schedule an initial discovery chat!",
-  },
-];
+import { faqsData as fallbackFaqs, FaqItem } from "@/data/faqsData";
 
 export default function PortaviaFaq() {
-  const [openId, setOpenId] = useState<number>(3);
+  const [faqs, setFaqs] = useState<FaqItem[]>(fallbackFaqs);
+  const [openId, setOpenId] = useState<number>(1);
+
+  useEffect(() => {
+    async function loadFaqs() {
+      try {
+        const res = await fetch("/api/faqs");
+        const json = await res.json();
+        if (json.success && json.data && json.data.length > 0) {
+          setFaqs(json.data);
+        }
+      } catch (e) {
+        console.error("Failed to load FAQs", e);
+      }
+    }
+    loadFaqs();
+  }, []);
 
   return (
     <section className="py-24 px-4 bg-[#F8F9FA] text-[#0F1115] border-t border-gray-200">
@@ -47,12 +31,15 @@ export default function PortaviaFaq() {
           
           {/* Left Title Column */}
           <div className="lg:col-span-5">
-            <h2 className="text-4xl sm:text-5xl font-bold text-[#0F1115] uppercase tracking-tighter font-display leading-tight">
-              FREQUENTLY ASKED QUESTIONS
+            <span className="text-xs font-bold uppercase tracking-widest text-indigo-600">
+              ✦ FREQUENTLY ASKED
+            </span>
+            <h2 className="text-4xl sm:text-5xl font-black text-[#0F1115] uppercase tracking-tighter font-display leading-tight mt-1">
+              QUESTIONS & ANSWERS
             </h2>
 
             <p className="mt-4 text-xs sm:text-sm text-gray-600 font-medium leading-relaxed">
-              Here are answers to some of the most common questions I receive as a freelance designer. If you don't see your question here, feel free to reach out — I'm happy to help!
+              Common questions about my design process, project timelines, deliverables, and collaboration workflow.
             </p>
           </div>
 
@@ -71,14 +58,14 @@ export default function PortaviaFaq() {
                   >
                     <span
                       className={`text-base sm:text-lg font-bold uppercase font-display tracking-tight transition-colors ${
-                        isOpen ? "text-[#6366F1]" : "text-[#0F1115] group-hover:text-[#6366F1]"
+                        isOpen ? "text-indigo-600" : "text-[#0F1115] group-hover:text-indigo-600"
                       }`}
                     >
                       {faq.question}
                     </span>
                     <ChevronDown
                       className={`w-5 h-5 transition-transform duration-300 ${
-                        isOpen ? "rotate-180 text-[#6366F1]" : "text-gray-400"
+                        isOpen ? "rotate-180 text-indigo-600" : "text-gray-400"
                       }`}
                     />
                   </button>

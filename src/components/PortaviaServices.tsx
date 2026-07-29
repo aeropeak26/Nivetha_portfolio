@@ -1,76 +1,49 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import { ChevronDown, CheckCircle2 } from "lucide-react";
-
-const services = [
-  {
-    id: "01",
-    title: "1. UI/UX DESIGN",
-    items: [
-      "User research and persona mapping",
-      "Wireframing & interactive prototypes",
-      "Design systems & component libraries",
-      "Usability testing & conversion optimization",
-    ],
-    image: "/images/agency_workspace.png",
-  },
-  {
-    id: "02",
-    title: "2. GRAPHIC DESIGN",
-    items: [
-      "Logo and brand identity design",
-      "Social media graphics and ad creatives",
-      "Infographics and data visualization",
-      "Custom illustrations and icons",
-    ],
-    image: "/images/project_1.png",
-  },
-  {
-    id: "03",
-    title: "3. WEB DESIGN",
-    items: [
-      "Custom Next.js & Framer website design",
-      "Responsive layout for mobile & desktop",
-      "High performance & SEO optimization",
-      "Scroll animations & micro-interactions",
-    ],
-    image: "/images/project_shopease.png",
-  },
-  {
-    id: "04",
-    title: "4. BRANDING",
-    items: [
-      "Comprehensive brand strategy & positioning",
-      "Color palettes & typography scale",
-      "Brand voice & messaging guidelines",
-      "Marketing collateral & pitch deck design",
-    ],
-    image: "/images/project_coral_spiral.png",
-  },
-];
+import { servicesData as fallbackServices, ServiceItem } from "@/data/servicesData";
 
 export default function PortaviaServices() {
+  const [services, setServices] = useState<ServiceItem[]>(fallbackServices);
   const [expandedId, setExpandedId] = useState<string>("02");
 
-  const activeService = services.find((s) => s.id === expandedId) || services[1];
+  useEffect(() => {
+    async function loadServices() {
+      try {
+        const res = await fetch("/api/services");
+        const json = await res.json();
+        if (json.success && json.data && json.data.length > 0) {
+          setServices(json.data);
+        }
+      } catch (e) {
+        console.error("Failed to load services", e);
+      }
+    }
+    loadServices();
+  }, []);
+
+  const activeService = services.find((s) => s.id === expandedId) || services[0] || fallbackServices[0];
 
   return (
-    <section className="py-24 px-4 bg-[#F8F9FA] text-[#0F1115] border-t border-gray-100">
+    <section id="services" className="py-24 px-4 bg-[#F8F9FA] text-[#0F1115] border-t border-gray-100">
       <div className="max-w-6xl mx-auto">
         
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
           
           {/* Left Accordion Column */}
           <div className="lg:col-span-6">
-            <h2 className="text-4xl sm:text-6xl font-bold text-[#0F1115] uppercase tracking-tighter font-display leading-tight">
+            <span className="text-xs font-bold uppercase tracking-widest text-indigo-600">
+              ✦ CORE EXPERTISE
+            </span>
+            <h2 className="text-4xl sm:text-6xl font-black text-[#0F1115] uppercase tracking-tighter font-display leading-tight mt-1">
               WHAT I CAN DO FOR YOU
             </h2>
 
             <p className="mt-4 text-sm sm:text-base text-gray-600 font-medium leading-relaxed max-w-lg">
-              As a digital designer, I am a visual storyteller, crafting experiences that connect deeply and spark creativity.
+              Combining visual design excellence with front-end technical execution to deliver high-converting digital products.
             </p>
 
             {/* Accordion List */}
@@ -89,15 +62,15 @@ export default function PortaviaServices() {
                       <span
                         className={`text-xl sm:text-2xl font-bold uppercase font-display tracking-tight transition-colors ${
                           isOpen
-                            ? "text-[#6366F1]"
-                            : "text-[#0F1115] group-hover:text-[#6366F1]"
+                            ? "text-indigo-600"
+                            : "text-[#0F1115] group-hover:text-indigo-600"
                         }`}
                       >
                         {service.title}
                       </span>
                       <ChevronDown
                         className={`w-5 h-5 transition-transform duration-300 ${
-                          isOpen ? "rotate-180 text-[#6366F1]" : "text-gray-400"
+                          isOpen ? "rotate-180 text-indigo-600" : "text-gray-400"
                         }`}
                       />
                     </button>
@@ -111,12 +84,12 @@ export default function PortaviaServices() {
                           transition={{ duration: 0.3 }}
                           className="mt-3 pl-2 flex flex-col gap-2.5"
                         >
-                          {service.items.map((item) => (
+                          {service.items && service.items.map((item) => (
                             <div
                               key={item}
                               className="flex items-center gap-2.5 text-xs sm:text-sm text-gray-700 font-medium"
                             >
-                              <CheckCircle2 className="w-4 h-4 text-[#6366F1] shrink-0" />
+                              <CheckCircle2 className="w-4 h-4 text-indigo-600 shrink-0" />
                               <span>{item}</span>
                             </div>
                           ))}
@@ -139,7 +112,7 @@ export default function PortaviaServices() {
               className="relative w-full max-w-md aspect-[4/3] rounded-[32px] overflow-hidden shadow-xl border border-gray-200 bg-white transform rotate-3 hover:rotate-0 transition-transform duration-500"
             >
               <Image
-                src={activeService.image}
+                src={activeService.image || "/images/agency_workspace.png"}
                 alt={activeService.title}
                 fill
                 className="object-cover"

@@ -8,6 +8,7 @@ import { profileData } from "@/data/profileData";
 
 export default function PortaviaContact() {
   const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -15,10 +16,24 @@ export default function PortaviaContact() {
     message: "",
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setSubmitted(true);
-    setTimeout(() => setSubmitted(false), 5000);
+    setLoading(true);
+    try {
+      await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+      setSubmitted(true);
+      setFormData({ name: "", email: "", service: "", message: "" });
+      setTimeout(() => setSubmitted(false), 5000);
+    } catch (err) {
+      console.error(err);
+      setSubmitted(true);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -73,7 +88,7 @@ export default function PortaviaContact() {
               <div className="mt-8 p-6 rounded-3xl bg-[#EEF2FF] border border-indigo-200 text-[#0F1115] flex items-center gap-3 shadow-md">
                 <CheckCircle2 className="w-6 h-6 text-indigo-600 shrink-0" />
                 <p className="text-xs sm:text-sm font-bold text-indigo-950">
-                  Thank you! Your message has been sent. Nivetha will reply to your email shortly.
+                  Thank you! Your message has been sent to Nivetha Velusamy.
                 </p>
               </div>
             ) : (
@@ -142,9 +157,10 @@ export default function PortaviaContact() {
                 <div>
                   <button
                     type="submit"
-                    className="px-8 py-3.5 rounded-full bg-[#0F1115] text-white font-bold text-xs uppercase tracking-wider hover:bg-indigo-600 transition-all active:scale-95 shadow-md"
+                    disabled={loading}
+                    className="px-8 py-3.5 rounded-full bg-[#0F1115] text-white font-bold text-xs uppercase tracking-wider hover:bg-indigo-600 transition-all active:scale-95 shadow-md disabled:opacity-50"
                   >
-                    SEND MESSAGE
+                    {loading ? "SENDING..." : "SEND MESSAGE"}
                   </button>
                 </div>
               </form>
