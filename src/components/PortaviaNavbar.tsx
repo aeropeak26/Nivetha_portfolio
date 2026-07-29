@@ -38,38 +38,42 @@ export default function PortaviaNavbar() {
   ];
 
   return (
-    <header className="fixed top-4 left-0 right-0 z-50 px-4 flex flex-col items-center pointer-events-none">
+    <header className="fixed top-3 sm:top-4 left-0 right-0 z-50 px-3 sm:px-4 flex flex-col items-center pointer-events-none">
       
       {/* Floating Header Capsule */}
       <nav
-        className={`pointer-events-auto max-w-2xl w-full mx-auto rounded-full transition-all duration-300 ${
+        className={`pointer-events-auto max-w-3xl w-full mx-auto rounded-full transition-all duration-300 ${
           scrolled
-            ? "bg-white/90 backdrop-blur-md shadow-xl border border-gray-200 py-2 px-4"
-            : "bg-white/95 backdrop-blur-sm shadow-md border border-gray-200/80 py-2.5 px-5"
+            ? "bg-white/95 backdrop-blur-md shadow-lg border border-gray-200 py-2 px-3.5 sm:px-5"
+            : "bg-white/90 backdrop-blur-md shadow-md border border-gray-200/80 py-2.5 px-4 sm:px-6"
         } flex items-center justify-between`}
       >
-        {/* Left Avatar & Name */}
-        <Link href="/" className="flex items-center gap-3 group">
-          <div className="relative w-9 h-9 rounded-full overflow-hidden border border-indigo-100 shadow-sm shrink-0 bg-indigo-50">
+        {/* Left Avatar, Name & Status */}
+        <Link href="/" className="flex items-center gap-2.5 sm:gap-3 group">
+          <div className="relative w-8 h-8 sm:w-9 sm:h-9 rounded-full overflow-hidden border border-indigo-100 shadow-sm shrink-0 bg-indigo-50">
             <Image
               src={profileData.avatar}
               alt={profileData.name}
               fill
               className="object-cover group-hover:scale-110 transition-transform duration-300"
             />
+            {/* Green status pulse dot */}
+            <span className="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full bg-emerald-500 ring-2 ring-white" />
           </div>
+
           <div className="flex flex-col text-left">
-            <span className="text-xs font-extrabold text-[#0F1115] group-hover:text-indigo-600 transition-colors leading-tight">
+            <span className="text-xs sm:text-sm font-extrabold text-[#0F1115] group-hover:text-indigo-600 transition-colors leading-tight">
               {profileData.name}
             </span>
-            <span className="text-[10px] text-gray-500 font-medium leading-none">
-              UI/UX Designer
+            <span className="text-[10px] sm:text-[11px] text-gray-500 font-medium leading-none mt-0.5 flex items-center gap-1">
+              <span>UI/UX Designer</span>
+              <span className="inline-block w-1 h-1 rounded-full bg-emerald-500 shrink-0" />
             </span>
           </div>
         </Link>
 
-        {/* Center Nav Links */}
-        <ul className="hidden md:flex items-center gap-6 text-xs font-semibold tracking-wide text-gray-700">
+        {/* Center Nav Links (Desktop) */}
+        <ul className="hidden md:flex items-center gap-6 text-xs font-bold tracking-wide text-gray-700">
           {navLinks.map((link) => {
             const isActive =
               link.href === "/projects"
@@ -82,7 +86,7 @@ export default function PortaviaNavbar() {
                   href={link.href}
                   className={`transition-colors duration-200 ${
                     isActive
-                      ? "text-indigo-600 font-bold"
+                      ? "text-indigo-600 font-extrabold"
                       : "hover:text-black text-gray-700"
                   }`}
                 >
@@ -93,46 +97,30 @@ export default function PortaviaNavbar() {
           })}
         </ul>
 
-        {/* Right Contact Button */}
-        <Link
-          href={getHref("#contact")}
-          className="hidden sm:inline-flex items-center justify-center px-4 py-2 rounded-full bg-[#0F1115] text-white text-xs font-bold hover:bg-indigo-600 transition-all duration-200 active:scale-95 shadow-sm"
-        >
-          Let's Talk
-        </Link>
+        {/* Right Contact Button & Status Pill (Desktop only) */}
+        <div className="hidden sm:flex items-center gap-3">
+          <span className="hidden lg:inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 text-[10px] font-bold border border-emerald-200">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+            Available for Hire
+          </span>
 
-        {/* Mobile Hamburger */}
+          <Link
+            href={getHref("#contact")}
+            className="inline-flex items-center justify-center px-4 py-2 rounded-full bg-[#0F1115] text-white text-xs font-bold hover:bg-indigo-600 transition-all duration-200 active:scale-95 shadow-sm"
+          >
+            Let's Talk
+          </Link>
+        </div>
+
+        {/* Mobile Hamburger Button */}
         <button
           onClick={() => setMobileOpen(!mobileOpen)}
-          className="md:hidden p-2 text-gray-800 focus:outline-none"
+          className="md:hidden p-2 text-gray-800 hover:text-indigo-600 focus:outline-none"
           aria-label="Toggle Menu"
         >
           {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
         </button>
       </nav>
-
-      {/* Floating "Available for Opportunities 🟢" Badge when scrolling down */}
-      <AnimatePresence>
-        {scrolled && (
-          <motion.div
-            initial={{ opacity: 0, y: -10, scale: 0.9 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: -10, scale: 0.9 }}
-            className="pointer-events-auto mt-2 inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white/95 backdrop-blur-md border border-gray-200 shadow-md text-[11px] font-semibold text-gray-800"
-          >
-            <div className="relative w-4 h-4 rounded-full overflow-hidden shrink-0 border border-gray-200">
-              <Image
-                src={profileData.avatar}
-                alt="Avatar"
-                fill
-                className="object-cover"
-              />
-            </div>
-            <span>Available for Hire</span>
-            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-          </motion.div>
-        )}
-      </AnimatePresence>
 
       {/* Mobile Drawer */}
       <AnimatePresence>
@@ -141,9 +129,14 @@ export default function PortaviaNavbar() {
             initial={{ opacity: 0, scale: 0.95, y: -10 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: -10 }}
-            className="pointer-events-auto md:hidden fixed inset-x-6 top-20 bg-white border border-gray-200 rounded-3xl p-6 shadow-2xl z-50"
+            className="pointer-events-auto md:hidden fixed inset-x-4 top-16 bg-white border border-gray-200 rounded-3xl p-6 shadow-2xl z-50"
           >
             <div className="flex flex-col gap-4 text-center">
+              <div className="inline-flex items-center justify-center gap-1.5 py-1 px-3 rounded-full bg-emerald-50 text-emerald-700 text-xs font-bold border border-emerald-200 mx-auto mb-1">
+                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                Available for Hire
+              </div>
+
               {navLinks.map((link) => (
                 <Link
                   key={link.label}
@@ -157,7 +150,7 @@ export default function PortaviaNavbar() {
               <Link
                 href={getHref("#contact")}
                 onClick={() => setMobileOpen(false)}
-                className="mt-2 py-3 rounded-full bg-[#0F1115] text-white font-semibold text-sm"
+                className="mt-2 py-3.5 rounded-full bg-[#0F1115] text-white font-bold text-sm uppercase tracking-wider"
               >
                 Contact Me
               </Link>

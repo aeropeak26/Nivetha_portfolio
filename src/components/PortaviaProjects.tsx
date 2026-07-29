@@ -26,81 +26,94 @@ function CardDeckItem({
     <div
       ref={containerRef}
       style={{
-        top: `calc(7rem + ${index * 24}px)`,
+        top: `calc(5.5rem + ${index * 20}px)`,
         zIndex: (index + 1) * 10,
       }}
-      className="sticky mb-12"
+      className="sticky mb-10 sm:mb-12"
     >
       <motion.div
         style={{ scale }}
-        className="group relative rounded-[32px] sm:rounded-[40px] overflow-hidden border border-gray-200/80 bg-white shadow-2xl transition-all duration-500 hover:shadow-indigo-500/10"
+        className="group relative rounded-[28px] sm:rounded-[40px] overflow-hidden border border-gray-200/80 bg-white shadow-2xl transition-all duration-500 hover:shadow-indigo-500/10"
       >
-        {/* Project Background Image Showcase */}
-        <div className="relative w-full aspect-[16/9] sm:aspect-[21/9] overflow-hidden bg-gray-900">
+        {/* Card Main Container: Tall Aspect on Mobile (min-h-[460px]), Wide Aspect on Desktop */}
+        <div className="relative w-full min-h-[440px] sm:min-h-[400px] sm:aspect-[21/9] overflow-hidden bg-gray-950 flex flex-col justify-between p-5 sm:p-8">
+          
+          {/* Background Showcase Image */}
           <Image
             src={project.image}
             alt={project.title}
             fill
-            className="object-cover group-hover:scale-105 transition-transform duration-700 brightness-95 group-hover:brightness-100"
+            className="object-cover group-hover:scale-105 transition-transform duration-700 brightness-[0.9] group-hover:brightness-100"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/45 to-black/10" />
+          
+          {/* Dark Vignette Overlay for Crisp Readability */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/60 to-black/30 pointer-events-none" />
 
-          {/* Top Category Badge & Tag */}
-          <div className="absolute top-6 left-6 sm:top-8 sm:left-8 flex flex-wrap gap-2.5 items-center">
-            <span className="px-4 py-1.5 rounded-full bg-white/95 text-[11px] font-extrabold uppercase tracking-wider text-black shadow-md">
-              {project.category}
-            </span>
-            <span className="px-3.5 py-1 rounded-full bg-indigo-600/90 text-white text-[10px] font-bold uppercase tracking-wider backdrop-blur-md">
-              ✦ Figma Featured
-            </span>
-          </div>
-
-          {/* Top Right Figma Link Button */}
-          {project.figmaUrl !== "#" && (
-            <a
-              href={project.figmaUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="absolute top-6 right-6 sm:top-8 sm:right-8 inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-black/60 hover:bg-black/90 text-white text-xs font-semibold backdrop-blur-md border border-white/20 transition-all"
-              onClick={(e) => e.stopPropagation()}
-            >
-              <span>Figma Design</span>
-              <ExternalLink className="w-3.5 h-3.5" />
-            </a>
-          )}
-
-          {/* Circular Arrow Action Button (Navigates to /projects/[id]) */}
-          <div className="absolute bottom-6 right-6 sm:bottom-8 sm:right-8">
-            <Link
-              href={`/projects/${project.id}`}
-              className="w-12 h-12 sm:w-16 sm:h-16 rounded-full bg-indigo-600 hover:bg-indigo-500 text-white flex items-center justify-center shadow-2xl group-hover:scale-110 transition-transform duration-300 active:scale-95"
-              aria-label={`View ${project.title} Case Study`}
-            >
-              <ArrowUpRight className="w-6 h-6 sm:w-7 sm:h-7 stroke-[2.5]" />
-            </Link>
-          </div>
-
-          {/* Bottom Overlay Title & Subtext */}
-          <div className="absolute bottom-6 left-6 right-20 sm:bottom-8 sm:left-8 sm:right-28 text-white">
-            <Link href={`/projects/${project.id}`}>
-              <h3 className="text-xl sm:text-3xl md:text-4xl font-black uppercase font-display tracking-tight leading-none text-white drop-shadow-md group-hover:text-indigo-200 transition-colors">
-                {project.title}
-              </h3>
-            </Link>
-            <p className="mt-2.5 text-xs sm:text-sm text-gray-200 font-medium line-clamp-2 max-w-2xl leading-relaxed">
-              {project.summary}
-            </p>
-            <div className="mt-3 flex flex-wrap gap-2">
-              {project.tools.slice(0, 3).map((tool) => (
-                <span
-                  key={tool}
-                  className="px-2.5 py-0.5 rounded-md bg-white/15 text-[10px] font-semibold text-gray-200 border border-white/10"
-                >
-                  {tool}
-                </span>
-              ))}
+          {/* Top Row: Category Badges & Figma Link */}
+          <div className="relative z-10 flex flex-wrap items-center justify-between gap-2">
+            <div className="flex flex-wrap gap-2 items-center">
+              <span className="px-3.5 py-1 rounded-full bg-white/95 text-[10px] sm:text-[11px] font-extrabold uppercase tracking-wider text-black shadow-md">
+                {project.category}
+              </span>
+              <span className="hidden sm:inline-flex px-3.5 py-1 rounded-full bg-indigo-600/90 text-white text-[10px] font-bold uppercase tracking-wider backdrop-blur-md">
+                ✦ Figma Featured
+              </span>
             </div>
+
+            {project.figmaUrl !== "#" && (
+              <a
+                href={project.figmaUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 px-3 py-1 sm:px-3.5 sm:py-1.5 rounded-full bg-black/60 hover:bg-black/90 text-white text-[11px] sm:text-xs font-semibold backdrop-blur-md border border-white/20 transition-all"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <span>Figma Design</span>
+                <ExternalLink className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
+              </a>
+            )}
           </div>
+
+          {/* Bottom Row: Content & Navigation Button */}
+          <div className="relative z-10 flex flex-col sm:flex-row sm:items-end justify-between gap-4 mt-auto pt-6">
+            
+            {/* Title & Subtext */}
+            <div className="max-w-2xl text-white">
+              <Link href={`/projects/${project.id}`}>
+                <h3 className="text-xl sm:text-3xl md:text-4xl font-black uppercase font-display tracking-tight leading-tight text-white drop-shadow-md group-hover:text-indigo-200 transition-colors">
+                  {project.title}
+                </h3>
+              </Link>
+              <p className="mt-2 text-xs sm:text-sm text-gray-200 font-medium line-clamp-2 leading-relaxed">
+                {project.summary}
+              </p>
+              
+              {/* Tool Chips */}
+              <div className="mt-3 flex flex-wrap gap-1.5 sm:gap-2">
+                {project.tools.slice(0, 3).map((tool) => (
+                  <span
+                    key={tool}
+                    className="px-2.5 py-0.5 rounded-md bg-white/15 text-[10px] font-semibold text-gray-200 border border-white/10 backdrop-blur-sm"
+                  >
+                    {tool}
+                  </span>
+                ))}
+              </div>
+            </div>
+
+            {/* Circular Navigation Arrow Button */}
+            <div className="shrink-0 self-end sm:self-auto">
+              <Link
+                href={`/projects/${project.id}`}
+                className="w-11 h-11 sm:w-16 sm:h-16 rounded-full bg-indigo-600 hover:bg-indigo-500 text-white flex items-center justify-center shadow-2xl group-hover:scale-110 transition-transform duration-300 active:scale-95"
+                aria-label={`View ${project.title} Case Study`}
+              >
+                <ArrowUpRight className="w-5 h-5 sm:w-7 sm:h-7 stroke-[2.5]" />
+              </Link>
+            </div>
+
+          </div>
+
         </div>
       </motion.div>
     </div>
@@ -111,25 +124,25 @@ export default function PortaviaProjects() {
   const featuredProjects = projectsData.filter((p) => p.tag === "Featured Project");
 
   return (
-    <section id="projects" className="py-24 px-4 bg-[#F8F9FA] text-[#0F1115] relative border-t border-gray-100">
+    <section id="projects" className="py-20 sm:py-24 px-4 bg-[#F8F9FA] text-[#0F1115] relative border-t border-gray-100">
       <div className="max-w-5xl mx-auto">
         
         {/* Section Header */}
-        <div className="text-center max-w-2xl mx-auto mb-16">
+        <div className="text-center max-w-2xl mx-auto mb-12 sm:mb-16 pt-4">
           <span className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-widest text-indigo-600">
             <Sparkles className="w-3.5 h-3.5" />
             <span>FEATURED FIGMA CASE STUDIES</span>
           </span>
-          <h2 className="text-4xl sm:text-6xl font-black text-[#0F1115] uppercase tracking-tighter font-display mt-2">
+          <h2 className="text-3xl sm:text-5xl md:text-6xl font-black text-[#0F1115] uppercase tracking-tighter font-display mt-1">
             FEATURED PROJECTS
           </h2>
           <p className="mt-3 text-xs sm:text-sm text-gray-600 font-medium leading-relaxed">
-            Explore 5 hand-crafted UI/UX case studies designed in Figma — ranging from Real Estate platforms and E-Commerce apps to CRM systems, Event Management, and Dating applications.
+            Explore hand-crafted UI/UX case studies designed in Figma — ranging from Real Estate platforms and E-Commerce apps to CRM systems, Event Management, and Dating applications.
           </p>
         </div>
 
         {/* Sticky Stacking Deck */}
-        <div className="relative pb-12">
+        <div className="relative pb-8 sm:pb-12">
           {featuredProjects.map((project, index) => (
             <CardDeckItem
               key={project.id}
@@ -139,11 +152,11 @@ export default function PortaviaProjects() {
           ))}
         </div>
 
-        {/* Bottom Action Button to navigate to /projects */}
-        <div className="mt-8 text-center">
+        {/* Bottom Action Button */}
+        <div className="mt-6 sm:mt-8 text-center">
           <Link
             href="/projects"
-            className="inline-flex items-center justify-center px-8 py-4 rounded-full bg-[#0F1115] text-white text-xs font-extrabold tracking-widest uppercase hover:bg-indigo-600 transition-all shadow-xl hover:shadow-indigo-500/20 active:scale-95 gap-2"
+            className="inline-flex items-center justify-center px-7 py-3.5 sm:px-8 sm:py-4 rounded-full bg-[#0F1115] text-white text-xs font-extrabold tracking-widest uppercase hover:bg-indigo-600 transition-all shadow-xl hover:shadow-indigo-500/20 active:scale-95 gap-2"
           >
             <span>BROWSE ALL {projectsData.length} PROJECTS</span>
             <ArrowUpRight className="w-4 h-4" />
