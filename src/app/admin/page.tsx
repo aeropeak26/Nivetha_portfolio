@@ -1246,6 +1246,137 @@ export default function AdminPage() {
                 </div>
               </div>
 
+              {/* 03. Key Features / Core Functionality Editor */}
+              <div className="space-y-3 pt-3 border-t border-gray-200">
+                <div className="flex items-center justify-between">
+                  <h3 className="font-extrabold text-sm text-indigo-600 uppercase tracking-wider">
+                    4. Key Application Features (03. Core Functionality)
+                  </h3>
+                  <button
+                    type="button"
+                    onClick={() =>
+                      setEditingProject({
+                        ...editingProject,
+                        keyFeatures: [...(editingProject.keyFeatures || []), { title: "New Feature", description: "Feature description..." }],
+                      })
+                    }
+                    className="px-3 py-1 rounded-full bg-indigo-50 text-indigo-700 font-bold text-xs border border-indigo-200 hover:bg-indigo-100"
+                  >
+                    + Add Feature Card
+                  </button>
+                </div>
+
+                <div className="space-y-3">
+                  {editingProject.keyFeatures?.map((feat, idx) => (
+                    <div key={idx} className="p-3 rounded-2xl bg-gray-50 border border-gray-200 flex flex-col gap-2 relative group">
+                      <div className="flex items-center justify-between">
+                        <span className="font-bold text-xs text-indigo-600">Feature Card 0{idx + 1}</span>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const updated = [...(editingProject.keyFeatures || [])];
+                            updated.splice(idx, 1);
+                            setEditingProject({ ...editingProject, keyFeatures: updated });
+                          }}
+                          className="text-red-500 font-bold hover:underline text-xs"
+                        >
+                          Remove Card
+                        </button>
+                      </div>
+                      <input
+                        type="text"
+                        placeholder="Feature Title..."
+                        value={feat.title}
+                        onChange={(e) => {
+                          const updated = [...(editingProject.keyFeatures || [])];
+                          updated[idx].title = e.target.value;
+                          setEditingProject({ ...editingProject, keyFeatures: updated });
+                        }}
+                        className="w-full px-3 py-1.5 rounded-lg bg-white border border-gray-200 text-xs font-bold"
+                      />
+                      <textarea
+                        rows={2}
+                        placeholder="Feature Description..."
+                        value={feat.description}
+                        onChange={(e) => {
+                          const updated = [...(editingProject.keyFeatures || [])];
+                          updated[idx].description = e.target.value;
+                          setEditingProject({ ...editingProject, keyFeatures: updated });
+                        }}
+                        className="w-full px-3 py-1.5 rounded-lg bg-white border border-gray-200 text-xs"
+                      />
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Color Palette & Tokens Swatches Editor */}
+              <div className="space-y-3 pt-3 border-t border-gray-200">
+                <div className="flex items-center justify-between">
+                  <h3 className="font-extrabold text-sm text-indigo-600 uppercase tracking-wider">
+                    5. Color Palette & Tokens Swatches
+                  </h3>
+                  <button
+                    type="button"
+                    onClick={() =>
+                      setEditingProject({
+                        ...editingProject,
+                        colorPalette: [...(editingProject.colorPalette || []), { name: "New Color", hex: "#6366F1" }],
+                      })
+                    }
+                    className="px-3 py-1 rounded-full bg-indigo-50 text-indigo-700 font-bold text-xs border border-indigo-200 hover:bg-indigo-100"
+                  >
+                    + Add Swatch
+                  </button>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  {editingProject.colorPalette?.map((swatch, idx) => (
+                    <div key={idx} className="p-3 rounded-2xl bg-gray-50 border border-gray-200 flex items-center gap-3">
+                      <div
+                        className="w-8 h-8 rounded-xl shrink-0 border border-gray-300 shadow-xs"
+                        style={{ backgroundColor: swatch.hex || "#000000" }}
+                      />
+                      <div className="flex-grow grid grid-cols-2 gap-2">
+                        <input
+                          type="text"
+                          placeholder="Name (e.g. Obsidian Black)"
+                          value={swatch.name}
+                          onChange={(e) => {
+                            const updated = [...(editingProject.colorPalette || [])];
+                            updated[idx].name = e.target.value;
+                            setEditingProject({ ...editingProject, colorPalette: updated });
+                          }}
+                          className="px-2.5 py-1 rounded-lg bg-white border border-gray-200 text-xs font-bold"
+                        />
+                        <input
+                          type="text"
+                          placeholder="HEX (e.g. #0F1115)"
+                          value={swatch.hex}
+                          onChange={(e) => {
+                            const updated = [...(editingProject.colorPalette || [])];
+                            updated[idx].hex = e.target.value;
+                            setEditingProject({ ...editingProject, colorPalette: updated });
+                          }}
+                          className="px-2.5 py-1 rounded-lg bg-white border border-gray-200 text-xs font-mono"
+                        />
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const updated = [...(editingProject.colorPalette || [])];
+                          updated.splice(idx, 1);
+                          setEditingProject({ ...editingProject, colorPalette: updated });
+                        }}
+                        className="text-red-500 font-bold hover:text-red-700 p-1"
+                      >
+                        ✕
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
               {/* Cover Image Uploader */}
               <div className="p-4 rounded-2xl bg-gray-50 border border-gray-200 space-y-3 pt-3 border-t border-gray-200">
                 <label className="block font-bold text-indigo-700 flex items-center gap-1.5">
