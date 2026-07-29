@@ -488,7 +488,6 @@ export default function AdminPage() {
               { id: "faqs", label: `FAQs (${faqs.length})`, icon: HelpCircle },
               { id: "blogs", label: `Blogs (${blogs.length})`, icon: BookOpen },
               { id: "inbox", label: `Inquiries (${messages.length})`, icon: MessageSquare },
-              { id: "supabase", label: "Database Setup", icon: Database },
             ].map((tab) => {
               const Icon = tab.icon;
               const isActive = activeTab === tab.id;
@@ -818,56 +817,6 @@ export default function AdminPage() {
                 ))}
               </div>
             )}
-          </div>
-        )}
-
-
-        {/* TAB 10: DATABASE SETUP */}
-        {activeTab === "supabase" && (
-          <div className="bg-white border border-gray-200 rounded-3xl p-6 sm:p-8 space-y-6 shadow-sm">
-            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-4 border-b border-gray-200">
-              <div>
-                <h2 className="text-lg font-black text-[#0F1115] flex items-center gap-2">
-                  <Database className="w-5 h-5 text-indigo-600" />
-                  <span>Database Table Setup</span>
-                </h2>
-                <p className="text-xs text-gray-500 font-medium">
-                  Database Status: <span className="text-emerald-600 font-bold">Connected & Ready</span>
-                </p>
-              </div>
-
-              <button
-                onClick={handleSeedDatabase}
-                className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-indigo-600 hover:bg-indigo-700 text-white font-extrabold text-xs uppercase tracking-wider transition-all shadow-md active:scale-95"
-              >
-                <Sparkles className="w-4 h-4" />
-                <span>Auto-Create & Sync Database Tables</span>
-              </button>
-            </div>
-
-            <div className="space-y-3">
-              <div className="flex items-center justify-between">
-                <span className="text-xs font-bold text-gray-700 flex items-center gap-1.5">
-                  <Code className="w-4 h-4 text-emerald-600" />
-                  <span>Database Table DDL SQL Script</span>
-                </span>
-                <button
-                  onClick={() => {
-                    navigator.clipboard.writeText(sqlSchema);
-                    setCopiedSql(true);
-                    setTimeout(() => setCopiedSql(false), 2000);
-                  }}
-                  className="px-4 py-2 rounded-full bg-gray-100 hover:bg-gray-200 text-[#0F1115] text-xs font-bold flex items-center gap-1.5 transition-colors border border-gray-200"
-                >
-                  {copiedSql ? <Check className="w-3.5 h-3.5 text-emerald-600" /> : <Copy className="w-3.5 h-3.5" />}
-                  <span>{copiedSql ? "Copied!" : "Copy SQL DDL"}</span>
-                </button>
-              </div>
-
-              <pre className="p-4 rounded-2xl bg-gray-950 text-xs font-mono text-emerald-400 overflow-x-auto max-h-96 leading-relaxed shadow-inner">
-                {sqlSchema}
-              </pre>
-            </div>
           </div>
         )}
 
