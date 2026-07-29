@@ -218,7 +218,7 @@ export default function AdminPage() {
       });
       const data = await res.json();
       if (data.success) {
-        setStatusMsg({ type: "success", msg: "Project saved successfully to Supabase DB!" });
+        setStatusMsg({ type: "success", msg: "Project saved successfully to Database!" });
         setIsProjectModalOpen(false);
         fetchData();
       } else {
@@ -240,7 +240,7 @@ export default function AdminPage() {
       });
       const data = await res.json();
       if (data.success) {
-        setStatusMsg({ type: "success", msg: "Profile & Section data saved to Supabase!" });
+        setStatusMsg({ type: "success", msg: "Profile & Section data saved successfully!" });
       } else {
         setStatusMsg({ type: "error", msg: data.error || "Failed to save profile" });
       }
@@ -419,8 +419,9 @@ export default function AdminPage() {
             <h1 className="text-base font-black text-[#0F1115] font-display tracking-tight leading-tight">
               FULL SITE ADMIN CONTROL PANEL
             </h1>
-            <p className="text-[11px] text-gray-500 font-medium">
-              Supabase DB: <span className="text-indigo-600 font-bold">https://iowejpqoezjjfrecqiip.supabase.co</span>
+            <p className="text-[11px] text-emerald-600 font-bold flex items-center gap-1.5 mt-0.5">
+              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+              <span>Database Connected</span>
             </p>
           </div>
         </div>
@@ -487,7 +488,7 @@ export default function AdminPage() {
               { id: "faqs", label: `FAQs (${faqs.length})`, icon: HelpCircle },
               { id: "blogs", label: `Blogs (${blogs.length})`, icon: BookOpen },
               { id: "inbox", label: `Inquiries (${messages.length})`, icon: MessageSquare },
-              { id: "supabase", label: "Supabase DB Setup", icon: Database },
+              { id: "supabase", label: "Database Setup", icon: Database },
             ].map((tab) => {
               const Icon = tab.icon;
               const isActive = activeTab === tab.id;
@@ -821,17 +822,17 @@ export default function AdminPage() {
         )}
 
 
-        {/* TAB 10: SUPABASE DB SETUP */}
+        {/* TAB 10: DATABASE SETUP */}
         {activeTab === "supabase" && (
           <div className="bg-white border border-gray-200 rounded-3xl p-6 sm:p-8 space-y-6 shadow-sm">
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-4 border-b border-gray-200">
               <div>
                 <h2 className="text-lg font-black text-[#0F1115] flex items-center gap-2">
                   <Database className="w-5 h-5 text-indigo-600" />
-                  <span>Supabase Database Table Setup</span>
+                  <span>Database Table Setup</span>
                 </h2>
                 <p className="text-xs text-gray-500 font-medium">
-                  Database: <code className="text-indigo-600 font-bold">https://iowejpqoezjjfrecqiip.supabase.co</code>
+                  Database Status: <span className="text-emerald-600 font-bold">Connected & Ready</span>
                 </p>
               </div>
 
@@ -848,7 +849,7 @@ export default function AdminPage() {
               <div className="flex items-center justify-between">
                 <span className="text-xs font-bold text-gray-700 flex items-center gap-1.5">
                   <Code className="w-4 h-4 text-emerald-600" />
-                  <span>Supabase Table DDL SQL Script</span>
+                  <span>Database Table DDL SQL Script</span>
                 </span>
                 <button
                   onClick={() => {
@@ -959,7 +960,7 @@ export default function AdminPage() {
               <div className="p-4 rounded-2xl bg-gray-50 border border-gray-200 space-y-3">
                 <label className="block font-bold text-indigo-700 flex items-center gap-1.5">
                   <Upload className="w-4 h-4 text-indigo-600" />
-                  <span>Upload Image (Auto-Converts to Base64 for Supabase)</span>
+                  <span>Upload Image (Auto-Convert Base64)</span>
                 </label>
 
                 <input
@@ -982,7 +983,7 @@ export default function AdminPage() {
                   type="submit"
                   className="px-6 py-2.5 rounded-full bg-indigo-600 hover:bg-indigo-700 font-bold text-white shadow-md active:scale-95"
                 >
-                  Save Project to Supabase
+                  Save Project
                 </button>
               </div>
             </form>
