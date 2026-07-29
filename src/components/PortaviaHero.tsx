@@ -25,6 +25,20 @@ export default function PortaviaHero() {
     loadProfile();
   }, []);
 
+  // Split title intelligently (e.g. "UI / UX DESIGNER" -> Left: "UI / UX", Right: "DESIGNER")
+  const fullTitle = profile.heroTitle || "UI / UX DESIGNER";
+  let leftTitle = "UI / UX";
+  let rightTitle = "DESIGNER";
+
+  if (fullTitle.includes("UI / UX")) {
+    leftTitle = "UI / UX";
+    rightTitle = fullTitle.replace("UI / UX", "").trim() || "DESIGNER";
+  } else if (fullTitle.includes(" ")) {
+    const parts = fullTitle.split(" ");
+    leftTitle = parts[0];
+    rightTitle = parts.slice(1).join(" ");
+  }
+
   return (
     <section id="hero" className="min-h-screen pt-28 pb-16 px-4 sm:px-8 flex flex-col justify-center items-center relative overflow-hidden bg-white text-[#0F1115]">
       
@@ -96,18 +110,18 @@ export default function PortaviaHero() {
           <span>{profile.heroTagline || "NIVETHA VELUSAMY — PORTFOLIO"}</span>
         </motion.div>
 
-        {/* Display Title Grid: UI / UX [ Profile Card ] DEVELOPER */}
+        {/* Display Title Grid: [ Left Title: UI / UX ] [ Center Card ] [ Right Title: DESIGNER ] */}
         <div className="w-full flex flex-col lg:flex-row items-center justify-center gap-4 lg:gap-8">
           
-          {/* Left Title */}
+          {/* Left Title: UI / UX */}
           <motion.div
             initial={{ opacity: 0, x: -30 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.7 }}
-            className="text-center lg:text-right"
+            className="text-center lg:text-right shrink-0"
           >
-            <h1 className="text-5xl sm:text-7xl md:text-[5rem] lg:text-[6rem] xl:text-[7.5rem] font-black tracking-tighter text-[#0F1115] uppercase leading-none font-display">
-              {profile.heroTitle?.split(" ")[0] || "UI / UX"}
+            <h1 className="text-5xl sm:text-7xl md:text-[5.5rem] lg:text-[5.5rem] xl:text-[7rem] font-black tracking-tighter text-[#0F1115] uppercase leading-none font-display">
+              {leftTitle}
             </h1>
           </motion.div>
 
@@ -116,7 +130,7 @@ export default function PortaviaHero() {
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.7, delay: 0.2 }}
-            className="relative w-64 sm:w-80 md:w-96 lg:w-[360px] xl:w-[400px] aspect-[3/4] rounded-[40px] overflow-hidden shadow-2xl border-4 border-white ring-1 ring-gray-200/80 shrink-0 my-4 lg:my-0 group bg-gray-100"
+            className="relative w-64 sm:w-80 md:w-96 lg:w-[340px] xl:w-[380px] aspect-[3/4] rounded-[40px] overflow-hidden shadow-2xl border-4 border-white ring-1 ring-gray-200/80 shrink-0 my-4 lg:my-0 group bg-gray-100"
           >
             <Image
               src={profile.avatar || "/images/Profile.png"}
@@ -132,15 +146,15 @@ export default function PortaviaHero() {
             </div>
           </motion.div>
 
-          {/* Right Title */}
+          {/* Right Title & Subtitle */}
           <motion.div
             initial={{ opacity: 0, x: 30 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.7, delay: 0.1 }}
-            className="text-center lg:text-left flex flex-col items-center lg:items-start"
+            className="text-center lg:text-left flex flex-col items-center lg:items-start shrink-0"
           >
-            <h1 className="text-5xl sm:text-7xl md:text-[5rem] lg:text-[6rem] xl:text-[7.5rem] font-black tracking-tighter text-[#0F1115] uppercase leading-none font-display">
-              {profile.heroTitle?.split(" ").slice(1).join(" ") || "DESIGNER"}
+            <h1 className="text-5xl sm:text-7xl md:text-[5.5rem] lg:text-[5.5rem] xl:text-[7rem] font-black tracking-tighter text-[#0F1115] uppercase leading-none font-display">
+              {rightTitle}
             </h1>
             <p className="mt-4 text-xs sm:text-sm md:text-base text-gray-600 font-medium max-w-xs leading-relaxed text-center lg:text-left">
               {profile.heroSubtitle || "Crafting intuitive, user-centered digital solutions with clean visuals and front-end code."}
