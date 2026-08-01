@@ -1668,7 +1668,10 @@ CREATE TABLE IF NOT EXISTS faqs (
   question TEXT NOT NULL,
   answer TEXT NOT NULL,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
-);`}</pre>
+);
+
+-- Mark realestate-project as featured_on_hero
+UPDATE projects SET featured_on_hero = TRUE WHERE id = 'realestate-project';`}</pre>
             </div>
 
             <div className="flex items-center justify-between pt-2 border-t border-gray-200">
@@ -1686,7 +1689,9 @@ CREATE TABLE IF NOT EXISTS faqs (
   question TEXT NOT NULL,
   answer TEXT NOT NULL,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
-);`;
+);
+
+UPDATE projects SET featured_on_hero = TRUE WHERE id = 'realestate-project';`;
                     navigator.clipboard.writeText(sqlText);
                     setCopiedSql(true);
                     setTimeout(() => setCopiedSql(false), 2000);
