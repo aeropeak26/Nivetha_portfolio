@@ -29,6 +29,9 @@ import {
   BookOpen,
   Star,
   Sparkles,
+  Database,
+  Copy,
+  Check,
 } from "lucide-react";
 
 export default function AdminPage() {
@@ -54,6 +57,10 @@ export default function AdminPage() {
   // Edit Project Modal state
   const [editingProject, setEditingProject] = useState<Partial<Project> | null>(null);
   const [isProjectModalOpen, setIsProjectModalOpen] = useState(false);
+
+  // SQL DDL Sync Modal state
+  const [isSqlModalOpen, setIsSqlModalOpen] = useState(false);
+  const [copiedSql, setCopiedSql] = useState(false);
 
   // Edit Service, Testimonial, FAQ, Blog state
   const [editingService, setEditingService] = useState<Partial<ServiceItem> | null>(null);
@@ -192,7 +199,9 @@ export default function AdminPage() {
       if (data.success) {
         setStatusMsg({
           type: "success",
-          msg: updated.featuredOnHero
+          msg: data.warning
+            ? data.warning
+            : updated.featuredOnHero
             ? `"${project.title}" featured on Hero Section!`
             : `Removed "${project.title}" from Hero Section`,
         });
@@ -237,7 +246,10 @@ export default function AdminPage() {
       });
       const data = await res.json();
       if (data.success) {
-        setStatusMsg({ type: "success", msg: "Project saved successfully to Database!" });
+        setStatusMsg({
+          type: "success",
+          msg: data.warning || "Project saved successfully to Database!",
+        });
         setIsProjectModalOpen(false);
         fetchData();
       } else {
@@ -448,6 +460,14 @@ export default function AdminPage() {
         </div>
 
         <div className="flex items-center gap-3">
+          <button
+            onClick={() => setIsSqlModalOpen(true)}
+            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-indigo-50 hover:bg-indigo-100 text-indigo-700 text-xs font-bold transition-all border border-indigo-200"
+          >
+            <Database className="w-3.5 h-3.5 text-indigo-600" />
+            <span>Supabase SQL DDL</span>
+          </button>
+
           <Link
             href="/"
             target="_blank"
@@ -1612,6 +1632,81 @@ export default function AdminPage() {
               </button>
             </div>
 
+          </div>
+        </div>
+      )}
+
+      {/* SUPABASE SQL SCHEMA MODAL */}
+      {isSqlModalOpen && (
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-white border border-gray-200 rounded-3xl max-w-2xl w-full p-6 sm:p-8 space-y-4 shadow-2xl flex flex-col max-h-[85vh]">
+            <div className="flex items-center justify-between border-b border-gray-200 pb-3">
+              <div className="flex items-center gap-2">
+                <Database className="w-5 h-5 text-indigo-600" />
+                <h3 className="font-extrabold text-base text-[#0F1115]">
+                  Supabase SQL Database Migration Script
+                </h3>
+              </div>
+              <button
+                onClick={() => setIsSqlModalOpen(false)}
+                className="w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 text-gray-600 flex items-center justify-center font-bold"
+              >
+                ✕
+              </button>
+            </div>
+
+            <p className="text-xs text-gray-600 font-medium">
+              Copy this SQL query and paste it into your <strong>Supabase Dashboard → SQL Editor → New Query → Run</strong> to ensure all table columns (including <code>featured_on_hero</code>) exist in your database cache.
+            </p>
+
+            <div className="relative bg-gray-900 text-gray-100 p-4 rounded-2xl overflow-y-auto font-mono text-[11px] leading-relaxed flex-grow border border-gray-800">
+              <pre className="whitespace-pre-wrap">{`-- Run this in your Supabase SQL Editor:
+ALTER TABLE IF EXISTS projects ADD COLUMN IF NOT EXISTS featured_on_hero BOOLEAN DEFAULT FALSE;
+
+CREATE TABLE IF NOT EXISTS faqs (
+  id BIGINT PRIMARY KEY,
+  question TEXT NOT NULL,
+  answer TEXT NOT NULL,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);`}</pre>
+            </div>
+
+            <div className="flex items-center justify-between pt-2 border-t border-gray-200">
+              <span className="text-[11px] text-gray-500 font-semibold">
+                File created at: <code>supabase_schema.sql</code>
+              </span>
+              <div className="flex gap-2">
+                <button
+                  type="button"
+                  onClick={() => {
+                    const sqlText = `ALTER TABLE IF EXISTS projects ADD COLUMN IF NOT EXISTS featured_on_hero BOOLEAN DEFAULT FALSE;
+
+CREATE TABLE IF NOT EXISTS faqs (
+  id BIGINT PRIMARY KEY,
+  question TEXT NOT NULL,
+  answer TEXT NOT NULL,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);`;
+                    navigator.clipboard.writeText(sqlText);
+                    setCopiedSql(true);
+                    setTimeout(() => setCopiedSql(false), 2000);
+                  }}
+                  className="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-full bg-indigo-600 hover:bg-indigo-700 text-white font-extrabold text-xs transition-all shadow-md active:scale-95 cursor-pointer"
+                >
+                  {copiedSql ? (
+                    <>
+                      <Check className="w-3.5 h-3.5" />
+                      <span>Copied SQL to Clipboard!</span>
+                    </>
+                  ) : (
+                    <>
+                      <Copy className="w-3.5 h-3.5" />
+                      <span>Copy SQL Query</span>
+                    </>
+                  )}
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       )}

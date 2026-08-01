@@ -105,12 +105,30 @@ export async function POST(request: Request) {
       .select();
 
     if (error) {
+      // If error is due to missing 'featured_on_hero' column in Supabase table schema
+      if (
+        error.message?.includes("featured_on_hero") ||
+        error.message?.includes("schema cache") ||
+        error.code === "PGRST204"
+      ) {
+        const { featured_on_hero, ...payloadWithoutHero } = dbPayload;
+        const retry = await supabase.from("projects").upsert(payloadWithoutHero).select();
+        if (!retry.error && retry.data) {
+          return NextResponse.json({
+            success: true,
+            data: retry.data[0],
+            tableExists: true,
+            warning: "Project saved! Run 'ALTER TABLE projects ADD COLUMN IF NOT EXISTS featured_on_hero BOOLEAN DEFAULT FALSE;' in Supabase SQL Editor to enable DB persistence for hero tag.",
+          });
+        }
+      }
+
       const isTableMissing = error.code === "42P01" || error.message?.includes("does not exist");
       return NextResponse.json(
         {
           success: false,
           error: isTableMissing
-            ? "Table 'projects' does not exist in Supabase. Please click 'Auto-Create & Sync Database' or run SQL DDL."
+            ? "Table 'projects' does not exist in Supabase. Please run SQL DDL in Supabase SQL Editor."
             : error.message,
           tableExists: false,
         },
