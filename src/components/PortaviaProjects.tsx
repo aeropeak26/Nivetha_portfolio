@@ -145,15 +145,17 @@ export default function PortaviaProjects() {
     loadProjects();
   }, []);
 
-  const heroFeaturedProject = projects.find((p) => p.featuredOnHero === true);
-  const featuredProjects = projects.filter((p) => p.tag === "Featured Project" || p.featuredOnHero);
+  const tickedProjects = projects.filter((p) => p.featuredOnHero === true);
+  const featuredProjects = tickedProjects.length > 0
+    ? tickedProjects
+    : projects.filter((p) => p.tag === "Featured Project");
 
   return (
     <section id="projects" className="py-20 sm:py-24 px-4 bg-[#F8F9FA] text-[#0F1115] relative border-t border-gray-100">
       <div className="max-w-5xl mx-auto">
         
         {/* Section Header */}
-        <div className="text-center max-w-2xl mx-auto mb-10 pt-4">
+        <div className="text-center max-w-2xl mx-auto mb-12 sm:mb-16 pt-4">
           <span className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-widest text-indigo-600">
             <Sparkles className="w-3.5 h-3.5" />
             <span>FEATURED FIGMA CASE STUDIES</span>
@@ -166,50 +168,7 @@ export default function PortaviaProjects() {
           </p>
         </div>
 
-        {/* Dynamic Featured Project Mention Pill Card */}
-        {heroFeaturedProject && (
-          <motion.div
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            className="mb-12 w-full max-w-md mx-auto"
-          >
-            <Link
-              href={`/projects/${heroFeaturedProject.id}`}
-              className="group relative flex items-center gap-3.5 p-2.5 pr-4 rounded-2xl bg-white backdrop-blur-md border border-amber-200/90 shadow-lg hover:shadow-xl hover:border-amber-400 transition-all duration-300 active:scale-[0.99]"
-            >
-              <div className="relative w-12 h-12 rounded-xl overflow-hidden bg-gray-100 shrink-0 border border-gray-200">
-                <Image
-                  src={heroFeaturedProject.image || "/images/realestate_preview.png"}
-                  alt={heroFeaturedProject.title}
-                  fill
-                  className="object-cover group-hover:scale-110 transition-transform duration-500"
-                />
-              </div>
-
-              <div className="flex-grow min-w-0 text-left">
-                <div className="flex items-center gap-1.5 mb-0.5">
-                  <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-amber-50 text-amber-800 border border-amber-200 text-[10px] font-black uppercase tracking-wider">
-                    <Star className="w-2.5 h-2.5 fill-amber-500 text-amber-500" />
-                    Featured Project
-                  </span>
-                  <span className="text-[10px] font-medium text-gray-400 truncate">
-                    • {heroFeaturedProject.category}
-                  </span>
-                </div>
-                <h4 className="text-xs font-extrabold text-[#0F1115] group-hover:text-indigo-600 transition-colors truncate">
-                  {heroFeaturedProject.title}
-                </h4>
-              </div>
-
-              <div className="w-7 h-7 rounded-full bg-gray-100 group-hover:bg-indigo-600 text-gray-600 group-hover:text-white flex items-center justify-center shrink-0 transition-all duration-300">
-                <ArrowUpRight className="w-3.5 h-3.5" />
-              </div>
-            </Link>
-          </motion.div>
-        )}
-
-        {/* Sticky Stacking Deck */}
+        {/* Sticky Stacking Deck with Animated Cards */}
         <div className="relative pb-8 sm:pb-12">
           {featuredProjects.map((project, index) => (
             <CardDeckItem

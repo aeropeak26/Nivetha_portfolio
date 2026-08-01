@@ -1285,10 +1285,10 @@ export default function AdminPage() {
                       </div>
                       <div>
                         <label htmlFor="featuredOnHero" className="font-extrabold text-xs text-amber-950 cursor-pointer block">
-                          Feature this Project on Hero Section (Homepage)
+                          Showcase as Featured Project Card (Landing Page)
                         </label>
                         <p className="text-[11px] text-amber-800 font-medium">
-                          Tick option to highlight and mention this project directly on the main website Hero section.
+                          Tick this option to feature this project card with stacking animation in the Featured Projects section.
                         </p>
                       </div>
                     </div>
