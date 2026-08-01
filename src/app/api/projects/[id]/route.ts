@@ -45,6 +45,7 @@ export async function GET(
       colorPalette: Array.isArray(data.color_palette) ? data.color_palette : (typeof data.color_palette === 'string' ? JSON.parse(data.color_palette) : []),
       figmaEmbedUrl: data.figma_embed_url || data.figmaEmbedUrl || "",
       interactivePreviewType: data.interactive_preview_type || data.interactivePreviewType || "figma",
+      featuredOnHero: Boolean(data.featured_on_hero ?? data.featuredOnHero ?? false),
     };
 
     return NextResponse.json({ success: true, data: formattedProject });

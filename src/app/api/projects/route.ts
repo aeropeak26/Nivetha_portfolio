@@ -52,6 +52,7 @@ export async function GET() {
       colorPalette: Array.isArray(item.color_palette) ? item.color_palette : (typeof item.color_palette === 'string' ? JSON.parse(item.color_palette) : []),
       figmaEmbedUrl: item.figma_embed_url || item.figmaEmbedUrl || "",
       interactivePreviewType: item.interactive_preview_type || item.interactivePreviewType || "figma",
+      featuredOnHero: Boolean(item.featured_on_hero ?? item.featuredOnHero ?? false),
     }));
 
     return NextResponse.json({
@@ -94,6 +95,7 @@ export async function POST(request: Request) {
       color_palette: body.colorPalette || [],
       figma_embed_url: body.figmaEmbedUrl || "",
       interactive_preview_type: body.interactivePreviewType || "figma",
+      featured_on_hero: Boolean(body.featuredOnHero),
       updated_at: new Date().toISOString(),
     };
 

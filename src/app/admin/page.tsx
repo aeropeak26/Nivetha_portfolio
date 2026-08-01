@@ -174,8 +174,35 @@ export default function AdminPage() {
       ],
       figmaEmbedUrl: "",
       interactivePreviewType: "figma",
+      featuredOnHero: false,
     });
     setIsProjectModalOpen(true);
+  };
+
+  const handleToggleFeaturedHero = async (project: Project) => {
+    const updated = { ...project, featuredOnHero: !project.featuredOnHero };
+    setStatusMsg(null);
+    try {
+      const res = await fetch("/api/projects", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(updated),
+      });
+      const data = await res.json();
+      if (data.success) {
+        setStatusMsg({
+          type: "success",
+          msg: updated.featuredOnHero
+            ? `"${project.title}" featured on Hero Section!`
+            : `Removed "${project.title}" from Hero Section`,
+        });
+        fetchData();
+      } else {
+        setStatusMsg({ type: "error", msg: data.error || "Failed to update hero feature status" });
+      }
+    } catch {
+      setStatusMsg({ type: "error", msg: "Failed to update hero feature status" });
+    }
   };
 
   const openEditProjectModal = (project: Project) => {
@@ -299,6 +326,24 @@ export default function AdminPage() {
       }
     } catch {
       setStatusMsg({ type: "error", msg: "Failed to save FAQ" });
+    }
+  };
+
+  // Delete FAQ Handler
+  const handleDeleteFaq = async (id: number) => {
+    if (!confirm("Are you sure you want to delete this FAQ?")) return;
+    setStatusMsg(null);
+    try {
+      const res = await fetch(`/api/faqs/${id}`, { method: "DELETE" });
+      const data = await res.json();
+      if (data.success) {
+        setStatusMsg({ type: "success", msg: "FAQ item deleted!" });
+        fetchData();
+      } else {
+        setStatusMsg({ type: "error", msg: data.error || "Failed to delete FAQ" });
+      }
+    } catch {
+      setStatusMsg({ type: "error", msg: "Failed to delete FAQ" });
     }
   };
 
@@ -504,6 +549,16 @@ export default function AdminPage() {
             </button>
           )}
 
+          {activeTab === "faqs" && (
+            <button
+              onClick={() => setEditingFaq({ id: faqs.length + 1, question: "", answer: "" })}
+              className="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-indigo-600 hover:bg-indigo-700 text-white font-extrabold text-xs uppercase tracking-wider transition-all shadow-md active:scale-95"
+            >
+              <Plus className="w-4 h-4" />
+              <span>Add New FAQ</span>
+            </button>
+          )}
+
           {activeTab === "blogs" && (
             <button
               onClick={() => setEditingBlog({ id: `blog-${Date.now()}`, title: "", category: "Insights", date: "May 2025", description: "", image: "/images/agency_workspace.png" })}
@@ -536,6 +591,12 @@ export default function AdminPage() {
                       <div className="absolute top-3 left-3 px-3 py-1 rounded-full bg-white/90 text-[10px] font-extrabold text-black backdrop-blur-md shadow-sm">
                         {project.category}
                       </div>
+                      {project.featuredOnHero && (
+                        <div className="absolute top-3 right-3 px-2.5 py-1 rounded-full bg-amber-500 text-white font-black text-[10px] uppercase flex items-center gap-1 shadow-md">
+                          <Star className="w-3 h-3 fill-white" />
+                          <span>Hero Featured</span>
+                        </div>
+                      )}
                     </div>
 
                     <div className="p-5">
@@ -551,16 +612,29 @@ export default function AdminPage() {
                     </div>
                   </div>
 
-                  <div className="p-4 border-t border-gray-100 bg-gray-50 flex items-center justify-between">
+                  <div className="p-4 border-t border-gray-100 bg-gray-50 flex items-center justify-between gap-2">
                     <Link
                       href={`/projects/${project.id}`}
                       target="_blank"
-                      className="text-xs text-indigo-600 hover:underline font-extrabold"
+                      className="text-xs text-indigo-600 hover:underline font-extrabold shrink-0"
                     >
-                      Preview Case Study ↗
+                      Preview ↗
                     </Link>
 
-                    <div className="flex gap-2">
+                    <div className="flex items-center gap-2">
+                      <button
+                        onClick={() => handleToggleFeaturedHero(project)}
+                        title={project.featuredOnHero ? "Click to unmark from Hero" : "Click to feature on Hero"}
+                        className={`px-2.5 py-1.5 rounded-xl border text-[11px] font-bold transition-all flex items-center gap-1 ${
+                          project.featuredOnHero
+                            ? "bg-amber-500 border-amber-500 text-white shadow-xs"
+                            : "bg-white border-gray-200 text-gray-600 hover:bg-gray-100"
+                        }`}
+                      >
+                        <Star className={`w-3.5 h-3.5 ${project.featuredOnHero ? "fill-white text-white" : "text-amber-500"}`} />
+                        <span>{project.featuredOnHero ? "Featured" : "Hero Tick"}</span>
+                      </button>
+
                       <button
                         onClick={() => openEditProjectModal(project)}
                         className="p-2 rounded-xl bg-white border border-gray-200 hover:bg-gray-100 text-gray-800 transition-colors shadow-xs"
@@ -840,6 +914,50 @@ export default function AdminPage() {
         )}
 
 
+        {/* TAB 7: FAQS MANAGER */}
+        {activeTab === "faqs" && (
+          <div className="bg-white border border-gray-200 rounded-3xl p-6 sm:p-8 space-y-6 shadow-sm">
+            <div className="flex items-center justify-between pb-4 border-b border-gray-200">
+              <div>
+                <h2 className="text-lg font-black text-[#0F1115]">Frequently Asked Questions ({faqs.length})</h2>
+                <p className="text-xs text-gray-500">Manage Q&A items displayed on the main website FAQ section.</p>
+              </div>
+              <button
+                onClick={() => setEditingFaq({ id: faqs.length + 1, question: "", answer: "" })}
+                className="px-4 py-2 rounded-full bg-indigo-600 hover:bg-indigo-700 text-white font-extrabold text-xs uppercase"
+              >
+                + Add FAQ
+              </button>
+            </div>
+
+            <div className="space-y-4">
+              {faqs.map((faq) => (
+                <div key={faq.id} className="p-5 rounded-2xl bg-gray-50 border border-gray-200 space-y-2 text-xs flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                  <div className="space-y-1">
+                    <h4 className="font-extrabold text-sm text-[#0F1115]">{faq.question}</h4>
+                    <p className="text-gray-600 font-medium leading-relaxed">{faq.answer}</p>
+                  </div>
+                  <div className="flex items-center gap-2 shrink-0">
+                    <button
+                      onClick={() => setEditingFaq(faq)}
+                      className="p-2 rounded-xl bg-white border border-gray-200 hover:bg-gray-100 text-gray-800 transition-colors shadow-xs"
+                    >
+                      <Edit2 className="w-4 h-4 text-indigo-600" />
+                    </button>
+                    <button
+                      onClick={() => handleDeleteFaq(faq.id)}
+                      className="p-2 rounded-xl bg-red-50 border border-red-200 hover:bg-red-100 text-red-600 transition-colors shadow-xs"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+
         {/* TAB 8: BLOGS MANAGER */}
         {activeTab === "blogs" && (
           <div className="bg-white border border-gray-200 rounded-3xl p-6 sm:p-8 space-y-6 shadow-sm">
@@ -916,6 +1034,57 @@ export default function AdminPage() {
         )}
 
       </div>
+
+      {/* EDIT FAQ MODAL */}
+      {editingFaq && (
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-white border border-gray-200 rounded-3xl max-w-lg w-full p-6 space-y-4 shadow-2xl">
+            <h3 className="font-extrabold text-base text-[#0F1115]">
+              {editingFaq.id && faqs.some((f) => f.id === editingFaq.id) ? "Edit FAQ Item" : "Add New FAQ Item"}
+            </h3>
+            <div className="space-y-3 text-xs">
+              <div>
+                <label className="block font-bold text-gray-700 mb-1">Question Title</label>
+                <input
+                  type="text"
+                  required
+                  placeholder="e.g. 1. WHAT SERVICES DO YOU OFFER?"
+                  value={editingFaq.question || ""}
+                  onChange={(e) => setEditingFaq({ ...editingFaq, question: e.target.value })}
+                  className="w-full px-4 py-2.5 rounded-xl bg-gray-50 border border-gray-200 font-bold text-xs"
+                />
+              </div>
+              <div>
+                <label className="block font-bold text-gray-700 mb-1">Answer Content</label>
+                <textarea
+                  rows={4}
+                  required
+                  placeholder="Write detailed answer here..."
+                  value={editingFaq.answer || ""}
+                  onChange={(e) => setEditingFaq({ ...editingFaq, answer: e.target.value })}
+                  className="w-full px-4 py-2.5 rounded-xl bg-gray-50 border border-gray-200 text-xs font-medium"
+                />
+              </div>
+            </div>
+            <div className="flex justify-end gap-2 pt-2 border-t border-gray-100">
+              <button
+                type="button"
+                onClick={() => setEditingFaq(null)}
+                className="px-4 py-2 rounded-full bg-gray-100 hover:bg-gray-200 text-xs font-bold text-gray-700"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={() => handleSaveFaq(editingFaq)}
+                className="px-5 py-2 rounded-full bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold shadow-md"
+              >
+                Save FAQ Item
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* EDIT TESTIMONIAL MODAL */}
       {editingTestimonial && (
@@ -1087,6 +1256,31 @@ export default function AdminPage() {
                 {/* Basic Meta Info */}
                 <div className="space-y-3">
                   <h3 className="font-extrabold text-sm text-indigo-600 uppercase tracking-wider">1. Basic Info & Tagging</h3>
+                  
+                  {/* Hero Section Featured Tick Option */}
+                  <div className="p-3.5 rounded-2xl bg-amber-50 border border-amber-200 flex items-center justify-between">
+                    <div className="flex items-center gap-2.5">
+                      <div className="w-8 h-8 rounded-xl bg-amber-500 text-white flex items-center justify-center font-bold shrink-0 shadow-sm">
+                        <Star className="w-4 h-4 fill-white text-white" />
+                      </div>
+                      <div>
+                        <label htmlFor="featuredOnHero" className="font-extrabold text-xs text-amber-950 cursor-pointer block">
+                          Feature this Project on Hero Section (Homepage)
+                        </label>
+                        <p className="text-[11px] text-amber-800 font-medium">
+                          Tick option to highlight and mention this project directly on the main website Hero section.
+                        </p>
+                      </div>
+                    </div>
+                    <input
+                      id="featuredOnHero"
+                      type="checkbox"
+                      checked={editingProject.featuredOnHero || false}
+                      onChange={(e) => setEditingProject({ ...editingProject, featuredOnHero: e.target.checked })}
+                      className="w-5 h-5 accent-indigo-600 rounded cursor-pointer shrink-0 ml-3"
+                    />
+                  </div>
+
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                     <div>
                       <label className="block font-bold text-gray-700 mb-1">Project Slug / ID</label>
