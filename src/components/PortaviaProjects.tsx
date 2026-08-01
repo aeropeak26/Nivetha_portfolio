@@ -55,16 +55,6 @@ function CardDeckItem({
               <span className="px-3.5 py-1 rounded-full bg-white/95 text-[10px] sm:text-[11px] font-extrabold uppercase tracking-wider text-black shadow-md">
                 {project.category}
               </span>
-              {project.featuredOnHero ? (
-                <span className="inline-flex items-center gap-1 px-3.5 py-1 rounded-full bg-amber-500 text-white text-[10px] sm:text-[11px] font-black uppercase tracking-wider shadow-md">
-                  <Star className="w-3 h-3 fill-white text-white" />
-                  <span>⭐ Featured Choice</span>
-                </span>
-              ) : (
-                <span className="hidden sm:inline-flex px-3.5 py-1 rounded-full bg-indigo-600/90 text-white text-[10px] font-bold uppercase tracking-wider backdrop-blur-md">
-                  ✦ Figma Featured
-                </span>
-              )}
             </div>
 
             {project.figmaUrl !== "#" && (
@@ -148,7 +138,7 @@ export default function PortaviaProjects() {
   const tickedProjects = projects.filter((p) => p.featuredOnHero === true);
   const featuredProjects = tickedProjects.length > 0
     ? tickedProjects
-    : projects.filter((p) => p.tag === "Featured Project");
+    : projects.filter((p) => p.tag === "Featured Project" && p.featuredOnHero !== false);
 
   return (
     <section id="projects" className="py-20 sm:py-24 px-4 bg-[#F8F9FA] text-[#0F1115] relative border-t border-gray-100">

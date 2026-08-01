@@ -24,7 +24,6 @@ export interface Project {
 export const projectsData: Project[] = [
   {
     id: "realestate-project",
-    featuredOnHero: true,
     title: "RealEstate Modern Property Portal",
     subtitle: "End-to-End Real Estate Discovery & Virtual Tour Platform",
     category: "UI/UX & Web Design",

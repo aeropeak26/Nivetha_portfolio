@@ -101,17 +101,6 @@ export default function PortaviaHero() {
       {/* Hero Container */}
       <div className="w-full max-w-[1440px] mx-auto flex flex-col items-center my-auto relative z-10 px-2 sm:px-6">
         
-        {/* Subtitle Badge */}
-        <motion.div
-          initial={{ opacity: 0, y: 15 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-indigo-50 border border-indigo-100 text-indigo-700 text-xs font-bold uppercase tracking-widest mb-6"
-        >
-          <Sparkles className="w-3.5 h-3.5" />
-          <span>{profile.heroTagline || "NIVETHA VELUSAMY — PORTFOLIO"}</span>
-        </motion.div>
-
         {/* Display Title Grid: [ Left Title: UI / UX ] [ Center Card ] [ Right Title: DESIGNER ] */}
         <div className="w-full flex flex-col lg:flex-row items-center justify-center gap-4 lg:gap-8">
           
