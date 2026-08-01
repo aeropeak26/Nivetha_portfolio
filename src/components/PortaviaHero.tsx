@@ -10,35 +10,18 @@ import { ArrowRight, Sparkles, FolderKanban, Star } from "lucide-react";
 
 export default function PortaviaHero() {
   const [profile, setProfile] = useState<ProfileData>(fallbackProfile);
-  const [featuredProject, setFeaturedProject] = useState<Project | null>(null);
 
   useEffect(() => {
     async function loadData() {
       try {
-        const [profRes, projRes] = await Promise.all([
-          fetch("/api/profile"),
-          fetch("/api/projects"),
-        ]);
-        const profJson = await profRes.json();
-        const projJson = await projRes.json();
+        const res = await fetch("/api/profile");
+        const json = await res.json();
 
-        if (profJson.success && profJson.data) {
-          setProfile((prev) => ({ ...prev, ...profJson.data }));
-        }
-
-        if (projJson.success && Array.isArray(projJson.data)) {
-          const heroTagged = projJson.data.find((p: Project) => p.featuredOnHero === true);
-          if (heroTagged) {
-            setFeaturedProject(heroTagged);
-          } else {
-            setFeaturedProject(null);
-          }
-        } else {
-          setFeaturedProject(null);
+        if (json.success && json.data) {
+          setProfile((prev) => ({ ...prev, ...json.data }));
         }
       } catch (e) {
-        console.error("Failed to fetch dynamic hero data", e);
-        setFeaturedProject(null);
+        console.error("Failed to fetch dynamic hero profile data", e);
       }
     }
     loadData();
@@ -181,49 +164,6 @@ export default function PortaviaHero() {
           </motion.div>
 
         </div>
-
-        {/* Dynamic Featured Project Mention Card */}
-        {featuredProject && (
-          <motion.div
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.3 }}
-            className="mt-8 w-full max-w-md mx-auto"
-          >
-            <Link
-              href={`/projects/${featuredProject.id}`}
-              className="group relative flex items-center gap-3.5 p-2.5 pr-4 rounded-2xl bg-white/90 backdrop-blur-md border border-gray-200/90 shadow-lg hover:shadow-xl hover:border-indigo-300 transition-all duration-300 active:scale-[0.99]"
-            >
-              <div className="relative w-12 h-12 rounded-xl overflow-hidden bg-gray-100 shrink-0 border border-gray-200">
-                <Image
-                  src={featuredProject.image || "/images/realestate_preview.png"}
-                  alt={featuredProject.title}
-                  fill
-                  className="object-cover group-hover:scale-110 transition-transform duration-500"
-                />
-              </div>
-
-              <div className="flex-grow min-w-0 text-left">
-                <div className="flex items-center gap-1.5 mb-0.5">
-                  <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-amber-50 text-amber-800 border border-amber-200 text-[10px] font-black uppercase tracking-wider">
-                    <Star className="w-2.5 h-2.5 fill-amber-500 text-amber-500" />
-                    Featured Project
-                  </span>
-                  <span className="text-[10px] font-medium text-gray-400 truncate">
-                    • {featuredProject.category}
-                  </span>
-                </div>
-                <h4 className="text-xs font-extrabold text-[#0F1115] group-hover:text-indigo-600 transition-colors truncate">
-                  {featuredProject.title}
-                </h4>
-              </div>
-
-              <div className="w-7 h-7 rounded-full bg-gray-100 group-hover:bg-indigo-600 text-gray-600 group-hover:text-white flex items-center justify-center shrink-0 transition-all duration-300">
-                <ArrowRight className="w-3.5 h-3.5" />
-              </div>
-            </Link>
-          </motion.div>
-        )}
 
         {/* Action Buttons */}
         <motion.div
