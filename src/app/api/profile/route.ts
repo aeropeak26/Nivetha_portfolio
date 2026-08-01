@@ -26,6 +26,10 @@ export async function GET() {
     const mergedData = {
       ...profileData,
       ...data,
+      heroTitle: data.hero_title ?? data.heroTitle ?? profileData.heroTitle,
+      heroSubtitle: data.hero_subtitle ?? data.heroSubtitle ?? profileData.heroSubtitle,
+      heroTagline: data.hero_tagline ?? data.heroTagline ?? profileData.heroTagline,
+      shortRole: data.short_role ?? data.shortRole ?? profileData.shortRole,
       socials: { ...profileData.socials, ...(data.socials || {}) },
       services: data.services || profileData.services,
       education: data.education || profileData.education,
@@ -47,17 +51,17 @@ export async function POST(request: Request) {
 
     const dbPayload = {
       id: 1,
-      name: body.name || profileData.name,
-      title: body.title || profileData.title,
-      short_role: body.shortRole || profileData.shortRole,
-      avatar: body.avatar || profileData.avatar,
-      location: body.location || profileData.location,
-      email: body.email || profileData.email,
-      phone: body.phone || profileData.phone,
-      bio: body.bio || profileData.bio,
-      hero_title: body.heroTitle || profileData.heroTitle,
-      hero_subtitle: body.heroSubtitle || profileData.heroSubtitle,
-      hero_tagline: body.heroTagline || profileData.heroTagline,
+      name: body.name ?? profileData.name,
+      title: body.title ?? profileData.title,
+      short_role: body.shortRole ?? profileData.shortRole,
+      avatar: body.avatar ?? profileData.avatar,
+      location: body.location ?? profileData.location,
+      email: body.email ?? profileData.email,
+      phone: body.phone ?? profileData.phone,
+      bio: body.bio ?? profileData.bio,
+      hero_title: body.heroTitle ?? profileData.heroTitle,
+      hero_subtitle: body.heroSubtitle ?? profileData.heroSubtitle,
+      hero_tagline: body.heroTagline ?? profileData.heroTagline,
       education: body.education || profileData.education,
       skills: body.skills || profileData.skills,
       technical_skills: body.technicalSkills || profileData.technicalSkills,
@@ -79,7 +83,7 @@ export async function POST(request: Request) {
         {
           success: false,
           error: isTableMissing
-            ? "Table 'profile' does not exist in Supabase. Please click 'Auto-Create & Sync Database' or run SQL DDL."
+            ? "Table 'profile' does not exist in Supabase. Please click 'Supabase SQL DDL' in Admin header and run the script in Supabase SQL Editor."
             : error.message,
           tableExists: false,
         },
@@ -87,7 +91,17 @@ export async function POST(request: Request) {
       );
     }
 
-    return NextResponse.json({ success: true, data: data[0], tableExists: true });
+    const savedRow = data && data[0] ? data[0] : dbPayload;
+    const formattedData = {
+      ...profileData,
+      ...savedRow,
+      heroTitle: savedRow.hero_title ?? savedRow.heroTitle ?? profileData.heroTitle,
+      heroSubtitle: savedRow.hero_subtitle ?? savedRow.heroSubtitle ?? profileData.heroSubtitle,
+      heroTagline: savedRow.hero_tagline ?? savedRow.heroTagline ?? profileData.heroTagline,
+      shortRole: savedRow.short_role ?? savedRow.shortRole ?? profileData.shortRole,
+    };
+
+    return NextResponse.json({ success: true, data: formattedData, tableExists: true });
   } catch (err: unknown) {
     const message = err instanceof Error ? err.message : "Internal Server Error";
     return NextResponse.json(

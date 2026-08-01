@@ -273,6 +273,8 @@ export default function AdminPage() {
       const data = await res.json();
       if (data.success) {
         setStatusMsg({ type: "success", msg: "Profile & Section data saved successfully!" });
+        if (data.data) setProfile(data.data);
+        fetchData();
       } else {
         setStatusMsg({ type: "error", msg: data.error || "Failed to save profile" });
       }
