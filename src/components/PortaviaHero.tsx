@@ -137,7 +137,7 @@ export default function PortaviaHero() {
             </div>
           </motion.div>
 
-          {/* Right Title & Subtitle */}
+          {/* Right Title */}
           <motion.div
             initial={{ opacity: 0, x: 30 }}
             animate={{ opacity: 1, x: 0 }}
@@ -147,9 +147,6 @@ export default function PortaviaHero() {
             <h1 className="text-5xl sm:text-7xl md:text-[5.5rem] lg:text-[5.5rem] xl:text-[7rem] font-black tracking-tighter text-[#0F1115] uppercase leading-none font-display">
               {rightTitle}
             </h1>
-            <p className="mt-4 text-xs sm:text-sm md:text-base text-gray-600 font-medium max-w-xs leading-relaxed text-center lg:text-left">
-              {profile.heroSubtitle || "Crafting intuitive, user-centered digital solutions with clean visuals and front-end code."}
-            </p>
           </motion.div>
 
         </div>
