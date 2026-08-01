@@ -10,7 +10,7 @@ import { ArrowRight, Sparkles, FolderKanban, Star } from "lucide-react";
 
 export default function PortaviaHero() {
   const [profile, setProfile] = useState<ProfileData>(fallbackProfile);
-  const [featuredProject, setFeaturedProject] = useState<Project | null>(fallbackProjects[0] || null);
+  const [featuredProject, setFeaturedProject] = useState<Project | null>(null);
 
   useEffect(() => {
     async function loadData() {
@@ -26,17 +26,19 @@ export default function PortaviaHero() {
           setProfile((prev) => ({ ...prev, ...profJson.data }));
         }
 
-        if (projJson.success && Array.isArray(projJson.data) && projJson.data.length > 0) {
+        if (projJson.success && Array.isArray(projJson.data)) {
           const heroTagged = projJson.data.find((p: Project) => p.featuredOnHero === true);
           if (heroTagged) {
             setFeaturedProject(heroTagged);
           } else {
-            const fallbackFeatured = projJson.data.find((p: Project) => p.tag === "Featured Project") || projJson.data[0];
-            setFeaturedProject(fallbackFeatured);
+            setFeaturedProject(null);
           }
+        } else {
+          setFeaturedProject(null);
         }
       } catch (e) {
         console.error("Failed to fetch dynamic hero data", e);
+        setFeaturedProject(null);
       }
     }
     loadData();

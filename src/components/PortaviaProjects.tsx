@@ -1,11 +1,11 @@
 "use client";
 
-import { useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowUpRight, ExternalLink, Sparkles } from "lucide-react";
-import { projectsData, Project } from "@/data/projectsData";
+import { projectsData as fallbackProjects, Project } from "@/data/projectsData";
 
 function CardDeckItem({
   project,
@@ -121,7 +121,24 @@ function CardDeckItem({
 }
 
 export default function PortaviaProjects() {
-  const featuredProjects = projectsData.filter((p) => p.tag === "Featured Project");
+  const [projects, setProjects] = useState<Project[]>(fallbackProjects);
+
+  useEffect(() => {
+    async function loadProjects() {
+      try {
+        const res = await fetch("/api/projects");
+        const json = await res.json();
+        if (json.success && Array.isArray(json.data) && json.data.length > 0) {
+          setProjects(json.data);
+        }
+      } catch (e) {
+        console.error("Failed to load projects", e);
+      }
+    }
+    loadProjects();
+  }, []);
+
+  const featuredProjects = projects.filter((p) => p.tag === "Featured Project" || p.featuredOnHero);
 
   return (
     <section id="projects" className="py-20 sm:py-24 px-4 bg-[#F8F9FA] text-[#0F1115] relative border-t border-gray-100">
@@ -158,7 +175,7 @@ export default function PortaviaProjects() {
             href="/projects"
             className="inline-flex items-center justify-center px-7 py-3.5 sm:px-8 sm:py-4 rounded-full bg-[#0F1115] text-white text-xs font-extrabold tracking-widest uppercase hover:bg-indigo-600 transition-all shadow-xl hover:shadow-indigo-500/20 active:scale-95 gap-2"
           >
-            <span>BROWSE ALL {projectsData.length} PROJECTS</span>
+            <span>BROWSE ALL {projects.length} PROJECTS</span>
             <ArrowUpRight className="w-4 h-4" />
           </Link>
         </div>
